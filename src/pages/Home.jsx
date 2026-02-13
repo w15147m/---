@@ -46,22 +46,17 @@ const Home = () => {
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
             
-            {/* Hero Image Section - Reduced Margin */}
-              <View className="items-center justify-center my-4">
-                <Image 
-                  source={require('../assets/ui-assets/Quran.png')}
-                  style={{ width: width * 0.7, height: width * 0.5 }}
-                  resizeMode="contain"
-                />
-              </View>
-
-              {/* Last Read Card - Now Reusable */}
+            {/* Hero Image Section  Last Read Card - Now Reusable */}
+              <View className="my-4">
               <LastReadCard 
                 title="Al-Fatihah"
                 subtitle="Ayah No: 1"
                 icon={require('../assets/ui-assets/quranSura.png')}
                 onPressBookmark={() => console.log('Bookmark pressed')}
               />
+              </View>
+
+          
 
               {/* Categories Grid - Now Reusable */}
               <View className="flex-row flex-wrap justify-between">

@@ -10,6 +10,7 @@ import AuthNavigator from './components/AuthNavigator';
 
 // Special Screens
 import SplashScreen from '../pages/SplashScreen';
+import ArticleDetail from '../pages/ArticleDetail';
 
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
@@ -41,6 +42,9 @@ const AppNavigator = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {/* Main App is always available (Home, Explorer etc) */}
         <Stack.Screen name="Main" component={MainDrawerNavigator} />
+        
+        {/* Detail Screens (Global Stack) */}
+        <Stack.Screen name="ArticleDetail" component={ArticleDetail} />
         
         {/* Auth is only available if not logged in */}
         {!user && (

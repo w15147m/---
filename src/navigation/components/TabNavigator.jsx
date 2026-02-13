@@ -63,16 +63,6 @@ const TabNavigator = () => {
       />
 
       <Tab.Screen 
-        name="ArticleDetail" 
-        component={ArticleDetail} 
-        options={{ 
-          title: 'Detail',
-          tabBarItemStyle: { display: 'none' },
-          tabBarStyle: { display: 'none' }
-        }} 
-      />
-
-      <Tab.Screen 
         name="ProfileTab" 
         component={Profile} 
         options={{ 

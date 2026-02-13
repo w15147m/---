@@ -7,6 +7,7 @@ import Toast from './src/components/Toast';
 import AppNavigator from './src/navigation/AppNavigator';
 import SplashScreen from 'react-native-splash-screen';
 import { runMigrations } from './src/db/client';
+import { seedDatabase } from './src/db/seed';
 
 import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 
@@ -31,6 +32,7 @@ function App() {
     const initializeApp = async () => {
       try {
         await runMigrations();
+        await seedDatabase();
       } catch (error) {
         // Silent error for UI, or handle as needed
       } finally {

@@ -4,13 +4,14 @@ import journal from './meta/_journal.json';
 import m0000 from './0000_powerful_red_skull.sql';
 import m0003 from './0003_certain_marauders.sql';
 import m0004 from './0004_drop_legacy_tables.sql';
+import m0005 from './0005_exotic_vampiro.sql';
 
-  export default {
-    journal,
-    migrations: {
-      m0000,
-      m0003,
-      m0004
-    }
+export default {
+  journal,
+  migrations: {
+    m0000,
+    m0003,
+    m0004,
+    m0005
   }
-  
+}

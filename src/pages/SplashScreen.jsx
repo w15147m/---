@@ -14,25 +14,26 @@ const { width, height } = Dimensions.get('window');
 
 const SplashScreen = ({ onFinish }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(20)).current;
+  const scaleAnim = useRef(new Animated.Value(0.95)).current;
 
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 1000,
+        duration: 1500,
         useNativeDriver: true,
       }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 800,
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 5,
+        tension: 40,
         useNativeDriver: true,
       }),
     ]).start();
 
     const timer = setTimeout(() => {
       if (onFinish) onFinish();
-    }, 3000);
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -41,43 +42,41 @@ const SplashScreen = ({ onFinish }) => {
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
       
+      {/* Background Image */}
+      <Image 
+        source={require('../assets/ui-assets/Splash.png')}
+        style={StyleSheet.absoluteFillObject}
+        resizeMode="cover"
+      />
+
+      {/* Overlay to ensure text readability if needed */}
+      <View style={[StyleSheet.absoluteFillObject, { backgroundColor: 'rgba(0,0,0,0.1)' }]} />
+
       <Animated.View 
         style={{ 
           opacity: fadeAnim, 
-          transform: [{ translateY: slideAnim }],
-          flex: 1,
-          width: '100%',
+          transform: [{ scale: scaleAnim }],
           alignItems: 'center',
           justifyContent: 'center',
-          paddingHorizontal: 20
         }}
       >
-        {/* Header Section */}
-        <View className="items-center mb-12">
-          <Text className="text-white text-5xl font-amiri-bold mb-2">
-            Halakat
-          </Text>
-          <Text className="text-slate-200 text-base text-center font-medium leading-5 px-10">
-            Memorize and recite{"\n"}Quran easily
-          </Text>
-        </View>
-
-        {/* Main Illustration Container */}
-        <View className="w-full aspect-square max-w-[340px] items-center justify-center">
-          <View className="w-full h-full rounded-[40px] overflow-hidden shadow-2xl shadow-black/40 elevation-10">
-            <Image 
-              source={require('../assets/images/quran_splash.png')}
-              style={{ width: '100%', height: '100%' }}
-              resizeMode="contain"
-            />
-          </View>
-        </View>
+        <Text 
+          className="text-white text-6xl text-center px-4"
+          style={{ 
+            fontFamily: 'arab quran islamic 140',
+            textShadowColor: 'rgba(0, 0, 0, 0.5)',
+            textShadowOffset: { width: 0, height: 2 },
+            textShadowRadius: 10
+          }}
+        >
+          مفاتیح الجنان
+        </Text>
       </Animated.View>
 
       {/* Subtle version indicator */}
-      <View className="absolute bottom-8 items-center w-full">
-        <Text className="text-white/20 text-[10px] uppercase font-bold tracking-[2px]">
-          v 1.2.0
+      <View className="absolute bottom-10 items-center w-full">
+        <Text className="text-white/40 text-[10px] uppercase font-bold tracking-[3px]">
+          Premium Edition
         </Text>
       </View>
     </View>
@@ -87,7 +86,7 @@ const SplashScreen = ({ onFinish }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#064e2b', // Dark green background
+    backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
   }

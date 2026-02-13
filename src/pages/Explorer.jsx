@@ -96,47 +96,15 @@ const Explorer = ({ navigation, route }) => {
           {/* Modular Header */}
           <HomeHeader onOpenDrawer={() => navigation.openDrawer()} />
 
-          {/* Hero Section */}
-          <View className="items-center justify-center my-4">
-            <Image 
-              source={require('../assets/ui-assets/Quran.png')}
-              style={{ width: width * 0.5, height: width * 0.35 }}
-              resizeMode="contain"
-            />
-          </View>
-
           {topLevelChapters.length > 0 ? (
             <View className="flex-1">
-              {/* Main Horizontal Tabs */}
-              <View className="mb-4">
-                <ScrollView 
-                  horizontal 
-                  showsHorizontalScrollIndicator={false}
-                >
-                  {topLevelChapters.map((chapter) => {
-                    const isActive = activeTabId === chapter.id;
-                    return (
-                      <TouchableOpacity
-                        key={chapter.id}
-                        onPress={() => setActiveTabId(chapter.id)}
-                        className={`mr-8 pb-3 items-center ${isActive ? 'border-b-4 border-sky-400' : ''}`}
-                      >
-                        <Text 
-                          className={`text-xl font-bold ${isActive ? 'text-white' : 'text-white/50'}`}
-                        >
-                          {chapter.name}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </ScrollView>
-              </View>
-
-              {/* Sub-Tabs (Specific / General) if exist */}
+              {/* Restoring Sub-Tabs (Specific / General) but cleaning labels */}
               {subChapters.length > 0 && (
-                <View className="bg-sky-400/20 rounded-2xl flex-row p-1 mb-4">
+                <View className="bg-sky-400/20 rounded-2xl flex-row p-1 mt-4 mb-4">
                   {subChapters.map((sub) => {
                     const isActive = activeSubTabId === sub.id;
+                    // Remove English part (e.g., '(Specific)')
+                    const displayName = sub.name.replace(/\s*\(.*?\)\s*/g, '').trim();
                     return (
                       <TouchableOpacity
                         key={sub.id}
@@ -146,7 +114,7 @@ const Explorer = ({ navigation, route }) => {
                         <Text 
                           className={`text-lg transition-all ${isActive ? 'text-white font-bold' : 'text-white/60 font-medium'}`}
                         >
-                          {sub.name}
+                          {displayName}
                         </Text>
                       </TouchableOpacity>
                     );

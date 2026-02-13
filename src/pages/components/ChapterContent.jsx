@@ -4,7 +4,7 @@ import { db } from '../../db/client';
 import { articles } from '../../db/schema';
 import { eq } from 'drizzle-orm';
 import { useNavigation } from '@react-navigation/native';
-import ListItemMarker from './ListItemMarker';
+import ArticleListItem from './ArticleListItem';
 
 const ChapterContent = ({ chapterId }) => {
   const [loading, setLoading] = useState(true);
@@ -47,30 +47,12 @@ const ChapterContent = ({ chapterId }) => {
     <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
       <View className="mb-20">
         {chapterArticles.map((article, index) => (
-          <TouchableOpacity
+          <ArticleListItem 
             key={article.id}
+            article={article}
+            index={index}
             onPress={() => navigation.navigate('ArticleDetail', { articleId: article.id })}
-            activeOpacity={0.7}
-            className="flex-row items-center py-4 border-b border-white/10"
-          >
-            {/* Number Index Marker */}
-            <ListItemMarker index={index + 1} />
-
-            {/* Content Section */}
-            <View className="flex-1 ml-4 justify-center">
-              <Text className="text-white text-xl font-bold mb-0.5">{article.title_en || 'Surah Title'}</Text>
-              <Text className="text-white/50 text-xs uppercase tracking-widest font-bold">
-                {article.type || 'MOCK'} • {article.detail || '7 VERSES'}
-              </Text>
-            </View>
-
-            {/* Arabic Name */}
-            <View>
-              <Text className="text-sky-400 text-2xl font-islamic text-right">
-                {article.title_ar}
-              </Text>
-            </View>
-          </TouchableOpacity>
+          />
         ))}
       </View>
     </ScrollView>

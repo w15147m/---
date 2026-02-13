@@ -16,6 +16,8 @@ import { chapters } from '../db/schema';
 import { isNull, eq } from 'drizzle-orm';
 import { useTheme } from '../context/ThemeContext';
 import HomeHeader from './components/HomeHeader';
+import MainTabSelector from './components/MainTabSelector';
+import SubTabSelector from './components/SubTabSelector';
 import ChapterContent from './components/ChapterContent';
 
 const { width } = Dimensions.get('window');
@@ -98,29 +100,20 @@ const Explorer = ({ navigation, route }) => {
 
           {topLevelChapters.length > 0 ? (
             <View className="flex-1">
-              {/* Restoring Sub-Tabs (Specific / General) but cleaning labels */}
-              {subChapters.length > 0 && (
-                <View className="bg-sky-400/20 rounded-2xl flex-row p-1 mt-4 mb-4">
-                  {subChapters.map((sub) => {
-                    const isActive = activeSubTabId === sub.id;
-                    // Remove English part (e.g., '(Specific)')
-                    const displayName = sub.name.replace(/\s*\(.*?\)\s*/g, '').trim();
-                    return (
-                      <TouchableOpacity
-                        key={sub.id}
-                        onPress={() => setActiveSubTabId(sub.id)}
-                        className={`flex-1 py-3 items-center rounded-xl ${isActive ? 'bg-sky-400 shadow-lg' : ''}`}
-                      >
-                        <Text 
-                          className={`text-lg transition-all ${isActive ? 'text-white font-bold' : 'text-white/60 font-medium'}`}
-                        >
-                          {displayName}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
-              )}
+              
+              {/* Main Horizontal Tabs */}
+              <MainTabSelector 
+                tabs={topLevelChapters}
+                activeTabId={activeTabId}
+                onTabPress={setActiveTabId}
+              />
+
+              {/* Sub-Tabs (Specific / General) */}
+              <SubTabSelector 
+                tabs={subChapters}
+                activeTabId={activeSubTabId}
+                onTabPress={setActiveSubTabId}
+              />
 
               {/* Active Tab Content */}
               <View className="flex-1">

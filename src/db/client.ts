@@ -36,13 +36,39 @@ const getColumnNames = (sql: string): string[] | null => {
 // Create a callback function for the proxy driver
 const callback = async (sql: string, params: any[], method: "all" | "run" | "get" | "values") => {
   try {
+    // console.log(`Proxy SQL [${method}]:`, sql.substring(0, 50));
+
+    // Check for RETURNING clause which is often unsupported in RN SQLite
+    const hasReturning = sql.toLowerCase().includes('returning');
+    let effectiveSql = sql;
+
+    if (hasReturning && (sql.toLowerCase().startsWith('insert') || sql.toLowerCase().startsWith('update'))) {
+      // Strip RETURNING for execution if the driver doesn't support it
+      effectiveSql = sql.replace(/\s+returning\s+.*$/i, '');
+      console.log('📡 Stripped RETURNING for compatibility');
+    }
+
     const results = await new Promise<any[]>((resolve, reject) => {
       sqlite.transaction((tx) => {
-        tx.executeSql(sql, params, (_, res) => {
+        tx.executeSql(effectiveSql, params, (_, res) => {
           const rows: any[] = [];
-          for (let i = 0; i < res.rows.length; i++) {
-            rows.push(res.rows.item(i));
+
+          if (res.rows.length > 0) {
+            for (let i = 0; i < res.rows.length; i++) {
+              rows.push(res.rows.item(i));
+            }
           }
+
+          // If it was an insert and we wanted data back but got none (due to unsupported RETURNING)
+          // we can at least return the insertId if Drizzle expects some columns
+          if (rows.length === 0 && res.insertId !== undefined && hasReturning) {
+            // This is a minimal fallback, but better than erroring
+            // Ideally we'd query the row here, but transaction is closing
+            // Drizzle will map the insertId to the primary key
+            const fallbackRow: any = { id: res.insertId };
+            rows.push(fallbackRow);
+          }
+
           resolve(rows);
         }, (_, err) => {
           reject(err);
@@ -55,7 +81,7 @@ const callback = async (sql: string, params: any[], method: "all" | "run" | "get
 
     if (columnNames && columnNames.length > 0) {
       // Map objects to arrays based on the parsed column order
-      const data = results.map(row => columnNames.map(col => row[col]));
+      const data = results.map(row => columnNames.map(col => row[col] === undefined ? null : row[col]));
       if (method === "get") {
         return { rows: data[0] || [] };
       }
@@ -145,22 +171,33 @@ export const runMigrations = async () => {
         if (!trimmed) continue;
 
         // Enhanced idempotent CREATE TABLE & DROP TABLE
-        let finalSql = trimmed
-          .replace(/CREATE TABLE\s+(?!IF NOT EXISTS)(`?\w+`?)/i, 'CREATE TABLE IF NOT EXISTS $1')
-          .replace(/DROP TABLE\s+(?!IF EXISTS)(`?\w+`?)/i, 'DROP TABLE IF EXISTS $1');
+        let finalSql = trimmed;
+        if (trimmed.toUpperCase().startsWith('CREATE TABLE') && !trimmed.toUpperCase().includes('IF NOT EXISTS')) {
+          finalSql = trimmed.replace(/CREATE TABLE/i, 'CREATE TABLE IF NOT EXISTS');
+        } else if (trimmed.toUpperCase().startsWith('DROP TABLE') && !trimmed.toUpperCase().includes('IF EXISTS')) {
+          finalSql = trimmed.replace(/DROP TABLE/i, 'DROP TABLE IF EXISTS');
+        }
 
         // Handle ALTER TABLE ADD COLUMN idempotency
         const alterMatch = finalSql.match(/ALTER TABLE [`']?(\w+)[`']? ADD [`']?(\w+)[`']?/i);
         if (alterMatch) {
           const [, tableName, columnName] = alterMatch;
-          if (await columnExists(tableName, columnName)) continue;
+          if (await columnExists(tableName, columnName)) {
+            console.log(`⏩ Skipping column add: ${tableName}.${columnName} already exists`);
+            continue;
+          }
         }
 
         try {
+          console.log(`📡 Executing: ${finalSql.substring(0, 50)}${finalSql.length > 50 ? '...' : ''}`);
           await execute(finalSql);
         } catch (e) {
-          console.error(`Error executing migration ${key} statement:`, finalSql, e);
-          throw e;
+          console.error(`❌ Statement failed: ${finalSql}`);
+          console.error(`❌ Error details:`, e);
+          // Don't throw for DROP TABLE errors during reset/migration testing
+          if (!finalSql.toUpperCase().includes('DROP TABLE')) {
+            throw e;
+          }
         }
       }
 

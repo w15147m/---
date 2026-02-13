@@ -63,7 +63,7 @@ const SplashScreen = ({ onFinish }) => {
         <Text 
           className="text-white text-6xl text-center px-4"
           style={{ 
-            fontFamily: 'arab quran islamic 140',
+            fontFamily: 'islamic_font',
             textShadowColor: 'rgba(0, 0, 0, 0.5)',
             textShadowOffset: { width: 0, height: 2 },
             textShadowRadius: 10

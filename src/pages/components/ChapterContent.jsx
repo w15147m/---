@@ -4,7 +4,7 @@ import { db } from '../../db/client';
 import { articles } from '../../db/schema';
 import { eq } from 'drizzle-orm';
 import { useNavigation } from '@react-navigation/native';
-import { ChevronRightIcon } from 'react-native-heroicons/outline';
+import ListItemMarker from './ListItemMarker';
 
 const ChapterContent = ({ chapterId }) => {
   const [loading, setLoading] = useState(true);
@@ -13,6 +13,7 @@ const ChapterContent = ({ chapterId }) => {
 
   useEffect(() => {
     const fetchArticles = async () => {
+      if (!chapterId) return;
       try {
         const results = await db.select().from(articles).where(eq(articles.chapter_id, chapterId));
         setChapterArticles(results);
@@ -29,7 +30,7 @@ const ChapterContent = ({ chapterId }) => {
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center p-10">
-        <ActivityIndicator color="#6366f1" />
+        <ActivityIndicator color="#0ea5e9" />
       </View>
     );
   }
@@ -37,26 +38,38 @@ const ChapterContent = ({ chapterId }) => {
   if (chapterArticles.length === 0) {
     return (
       <View className="flex-1 justify-center items-center p-10">
-        <Text className="text-slate-400 dark:text-slate-500 italic">No articles found in this chapter.</Text>
+        <Text className="text-white/40 italic">No articles found in this section.</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView className="flex-1 p-4" showsVerticalScrollIndicator={false}>
-      <View className="space-y-3 mb-20">
-        {chapterArticles.map((article) => (
+    <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+      <View className="mb-20">
+        {chapterArticles.map((article, index) => (
           <TouchableOpacity
             key={article.id}
             onPress={() => navigation.navigate('ArticleDetail', { articleId: article.id })}
             activeOpacity={0.7}
-            className="bg-white dark:bg-slate-900 p-5 rounded-3xl flex-row items-center border border-slate-50 dark:border-slate-800 shadow-sm"
+            className="flex-row items-center py-4 border-b border-white/10"
           >
-            <View className="flex-1">
-              <Text className="text-slate-900 dark:text-white font-uthman-taha text-xl mb-1">{article.title_ar}</Text>
-              <Text className="text-slate-500 dark:text-slate-400 text-sm">{article.title_en}</Text>
+            {/* Number Index Marker */}
+            <ListItemMarker index={index + 1} />
+
+            {/* Content Section */}
+            <View className="flex-1 ml-4 justify-center">
+              <Text className="text-white text-xl font-bold mb-0.5">{article.title_en || 'Surah Title'}</Text>
+              <Text className="text-white/50 text-xs uppercase tracking-widest font-bold">
+                {article.type || 'MOCK'} • {article.detail || '7 VERSES'}
+              </Text>
             </View>
-            <ChevronRightIcon size={20} color="#94a3b8" />
+
+            {/* Arabic Name */}
+            <View>
+              <Text className="text-sky-400 text-2xl font-islamic text-right">
+                {article.title_ar}
+              </Text>
+            </View>
           </TouchableOpacity>
         ))}
       </View>

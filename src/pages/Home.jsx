@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ImageBackground,
   StatusBar
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -34,7 +33,7 @@ const Home = () => {
   ];
 
   return (
-    <View className="flex-1 bg-[#F8FAFC] dark:bg-slate-950">
+    <View className="flex-1 bg-slate-950">
       <StatusBar translucent backgroundColor="transparent" barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <SafeAreaView className="flex-1">
         <View className="flex-1 px-6">

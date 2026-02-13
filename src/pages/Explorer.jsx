@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
+import { 
+  View, 
+  Text, 
+  SafeAreaView, 
+  ActivityIndicator, 
+  TouchableOpacity, 
+  ScrollView, 
+  ImageBackground, 
+  Image,
+  Dimensions,
+  StatusBar
+} from 'react-native';
 import { db } from '../db/client';
 import { chapters } from '../db/schema';
-import { isNull } from 'drizzle-orm';
+import { isNull, eq } from 'drizzle-orm';
 import { useTheme } from '../context/ThemeContext';
-import { Bars3Icon } from 'react-native-heroicons/outline';
+import HomeHeader from './components/HomeHeader';
 import ChapterContent from './components/ChapterContent';
+
+const { width } = Dimensions.get('window');
 
 const Explorer = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
@@ -50,7 +63,7 @@ const Explorer = ({ navigation, route }) => {
     const fetchSubChapters = async () => {
       try {
         const results = await db.select().from(chapters)
-          .where(require('drizzle-orm').eq(chapters.parent_id, activeTabId));
+          .where(eq(chapters.parent_id, activeTabId));
         
         setSubChapters(results);
         if (results.length > 0) {
@@ -68,91 +81,92 @@ const Explorer = ({ navigation, route }) => {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-[#F8FAFC] dark:bg-slate-950 px-6 pt-4">
-        <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#6366f1" />
-        </View>
-      </SafeAreaView>
+      <View className="flex-1 bg-slate-950 justify-center items-center">
+        <ActivityIndicator size="large" color="#0ea5e9" />
+      </View>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F8FAFC] dark:bg-slate-950">
-      {/* Header */}
-      <View className="flex-row justify-between items-center px-6 pt-4 mb-4">
-        <View>
-          <Text className="text-slate-400 dark:text-slate-400 font-bold text-xs uppercase tracking-widest mb-1">
-            Explore
-          </Text>
-          <Text className="text-2xl font-black text-slate-900 dark:text-white">Library</Text>
-        </View>
-        <TouchableOpacity 
-          className="p-2 rounded-xl bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800"
-          onPress={() => navigation.openDrawer()}
-        >
-          <Bars3Icon size={24} color={isDarkMode ? "#f8fafc" : "#1e293b"} />
-        </TouchableOpacity>
-      </View>
+    <View className="flex-1 bg-slate-950">
+      <StatusBar translucent backgroundColor="transparent" barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <SafeAreaView className="flex-1">
+        <View className="flex-1 px-6">
+          
+          {/* Modular Header */}
+          <HomeHeader onOpenDrawer={() => navigation.openDrawer()} />
 
-      {topLevelChapters.length > 0 ? (
-        <View className="flex-1">
-          {/* Main Horizontal Tabs */}
-          <View className="mb-2">
-            <ScrollView 
-              horizontal 
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingHorizontal: 20 }}
-            >
-              {topLevelChapters.map((chapter) => {
-                const isActive = activeTabId === chapter.id;
-                return (
-                  <TouchableOpacity
-                    key={chapter.id}
-                    onPress={() => setActiveTabId(chapter.id)}
-                    className={`mr-4 pb-2 px-2 ${isActive ? 'border-b-4 border-indigo-600' : ''}`}
-                  >
-                    <Text className={`text-base font-bold ${isActive ? (isDarkMode ? 'text-white' : 'text-slate-900') : 'text-slate-400'}`}>
-                      {chapter.name}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
+          {/* Hero Section */}
+          <View className="items-center justify-center my-4">
+            <Image 
+              source={require('../assets/ui-assets/Quran.png')}
+              style={{ width: width * 0.5, height: width * 0.35 }}
+              resizeMode="contain"
+            />
           </View>
 
-          {/* Sub-Tabs (Specific / General) if exist */}
-          {subChapters.length > 0 && (
-            <View className="bg-white dark:bg-slate-900 mx-4 rounded-2xl shadow-sm mb-4 flex-row p-1 border border-slate-100 dark:border-slate-800">
-              {subChapters.map((sub) => {
-                const isActive = activeSubTabId === sub.id;
-                return (
-                  <TouchableOpacity
-                    key={sub.id}
-                    onPress={() => setActiveSubTabId(sub.id)}
-                    className={`flex-1 py-3 items-center rounded-xl ${isActive ? 'bg-indigo-600 shadow-md' : ''}`}
-                  >
-                    <Text 
-                      className={`text-lg font-quran ${isActive ? 'text-white font-bold' : 'text-slate-400 font-medium'}`}
-                    >
-                      {sub.name}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
+          {topLevelChapters.length > 0 ? (
+            <View className="flex-1">
+              {/* Main Horizontal Tabs */}
+              <View className="mb-4">
+                <ScrollView 
+                  horizontal 
+                  showsHorizontalScrollIndicator={false}
+                >
+                  {topLevelChapters.map((chapter) => {
+                    const isActive = activeTabId === chapter.id;
+                    return (
+                      <TouchableOpacity
+                        key={chapter.id}
+                        onPress={() => setActiveTabId(chapter.id)}
+                        className={`mr-8 pb-3 items-center ${isActive ? 'border-b-4 border-sky-400' : ''}`}
+                      >
+                        <Text 
+                          className={`text-xl font-bold ${isActive ? 'text-white' : 'text-white/50'}`}
+                        >
+                          {chapter.name}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+
+              {/* Sub-Tabs (Specific / General) if exist */}
+              {subChapters.length > 0 && (
+                <View className="bg-sky-400/20 rounded-2xl flex-row p-1 mb-4">
+                  {subChapters.map((sub) => {
+                    const isActive = activeSubTabId === sub.id;
+                    return (
+                      <TouchableOpacity
+                        key={sub.id}
+                        onPress={() => setActiveSubTabId(sub.id)}
+                        className={`flex-1 py-3 items-center rounded-xl ${isActive ? 'bg-sky-400 shadow-lg' : ''}`}
+                      >
+                        <Text 
+                          className={`text-lg transition-all ${isActive ? 'text-white font-bold' : 'text-white/60 font-medium'}`}
+                        >
+                          {sub.name}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )}
+
+              {/* Active Tab Content */}
+              <View className="flex-1">
+                <ChapterContent chapterId={activeSubTabId || activeTabId} />
+              </View>
+            </View>
+          ) : (
+            <View className="flex-1 justify-center items-center p-10">
+              <Text className="text-white/50 text-center">No categories found in the library yet.</Text>
             </View>
           )}
-
-          {/* Active Tab Content */}
-          <View className="flex-1">
-            <ChapterContent chapterId={activeSubTabId || activeTabId} />
-          </View>
         </View>
-      ) : (
-        <View className="flex-1 justify-center items-center p-10">
-          <Text className="text-slate-400 dark:text-slate-500 text-center">No categories found in the library yet.</Text>
-        </View>
-      )}
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 };
 

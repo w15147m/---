@@ -16,18 +16,3 @@ Note: This might take a few minutes as it compiles everything.
 Once the command finishes successfully, your APK will be created at:
 
 android/app/build/outputs/apk/release/app-release.apk
-
-3. INSTALL ON YOUR PHONE
------------------------
-You have two options:
-
-Option A: Direct Install (if phone is connected via USB)
-Run this command:
-npx react-native run-android --mode=release
-
-Option B: Transfer the File
-1. Navigate to android/app/build/outputs/apk/release/ on your computer.
-2. Send the app-release.apk file to your phone (via USB, Google Drive, WhatsApp, etc.).
-3. On your phone, tap the file to install it.
-
-Note: You will likely need to uninstall the development version first if you see an "App not installed" error.

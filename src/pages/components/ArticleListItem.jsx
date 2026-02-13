@@ -16,7 +16,7 @@ const ArticleListItem = ({ article, index, onPress }) => {
       <View className="flex-1 ml-4 justify-center">
         <Text className="text-white text-xl font-bold mb-0.5">{article.title_en || 'Article Title'}</Text>
         <Text className="text-white/50 text-xs uppercase tracking-widest font-bold">
-          {article.type || 'CONTENT'} • {article.detail || 'DETAIL'}
+          {article.type || ''}  {article.detail || ''}
         </Text>
       </View>
 

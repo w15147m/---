@@ -101,13 +101,6 @@ const Explorer = ({ navigation, route }) => {
           {topLevelChapters.length > 0 ? (
             <View className="flex-1">
               
-              {/* Main Horizontal Tabs */}
-              <MainTabSelector 
-                tabs={topLevelChapters}
-                activeTabId={activeTabId}
-                onTabPress={setActiveTabId}
-              />
-
               {/* Sub-Tabs (Specific / General) */}
               <SubTabSelector 
                 tabs={subChapters}

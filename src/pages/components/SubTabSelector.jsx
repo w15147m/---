@@ -5,20 +5,20 @@ const SubTabSelector = ({ tabs, activeTabId, onTabPress }) => {
   if (!tabs || tabs.length === 0) return null;
 
   return (
-    <View className="bg-sky-400/20 rounded-2xl flex-row p-1 mt-4 mb-4">
+    <View className="flex-row justify-around mt-4 mb-6 border-b border-white/5">
       {tabs.map((tab) => {
         const isActive = activeTabId === tab.id;
-        // Clean name: Remove text in parentheses (e.g., '(Specific)')
+        // Clean name
         const displayName = tab.name.replace(/\s*\(.*?\)\s*/g, '').trim();
         
         return (
           <TouchableOpacity
             key={tab.id}
             onPress={() => onTabPress(tab.id)}
-            className={`flex-1 py-3 items-center rounded-xl ${isActive ? 'bg-sky-400 shadow-lg' : ''}`}
+            className={`mr-8 pb-3 items-center ${isActive ? 'border-b-4 border-sky-400' : ''}`}
           >
             <Text 
-              className={`text-lg transition-all ${isActive ? 'text-white font-bold' : 'text-white/60 font-medium'}`}
+              className={`text-lg font-bold ${isActive ? 'text-sky-400' : 'text-slate-400'}`}
             >
               {displayName}
             </Text>

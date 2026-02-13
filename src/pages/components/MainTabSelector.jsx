@@ -22,7 +22,7 @@ const MainTabSelector = ({ tabs, activeTabId, onTabPress }) => {
               className={`mr-8 pb-3 items-center ${isActive ? 'border-b-4 border-sky-400' : ''}`}
             >
               <Text 
-                className={`text-xl font-bold ${isActive ? 'text-white' : 'text-white/50'}`}
+                className={`text-xl font-bold ${isActive ? 'text-sky-400' : 'text-slate-400'}`}
               >
                 {displayName}
               </Text>

@@ -83,14 +83,14 @@ const Explorer = ({ navigation, route }) => {
 
   if (loading) {
     return (
-      <View className="flex-1 bg-slate-950 justify-center items-center">
+      <View className="flex-1 bg-slate-50 dark:bg-slate-950 justify-center items-center">
         <ActivityIndicator size="large" color="#0ea5e9" />
       </View>
     );
   }
 
   return (
-    <View className="flex-1 bg-slate-950">
+    <View className="flex-1 bg-slate-50 dark:bg-slate-950">
       <StatusBar translucent backgroundColor="transparent" barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <SafeAreaView className="flex-1">
         <View className="flex-1 px-6">
@@ -115,7 +115,7 @@ const Explorer = ({ navigation, route }) => {
             </View>
           ) : (
             <View className="flex-1 justify-center items-center p-10">
-              <Text className="text-white/50 text-center">No categories found in the library yet.</Text>
+              <Text className="text-slate-400 dark:text-white/50 text-center">No categories found in the library yet.</Text>
             </View>
           )}
         </View>

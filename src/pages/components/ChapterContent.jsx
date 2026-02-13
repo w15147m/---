@@ -38,7 +38,7 @@ const ChapterContent = ({ chapterId }) => {
   if (chapterArticles.length === 0) {
     return (
       <View className="flex-1 justify-center items-center p-10">
-        <Text className="text-white/40 italic">No articles found in this section.</Text>
+        <Text className="text-slate-400 dark:text-white/40 italic">No articles found in this section.</Text>
       </View>
     );
   }

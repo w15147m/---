@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import { useTheme } from '../../context/ThemeContext';
 
 const xml = `
 <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -16,10 +17,12 @@ const xml = `
 `;
 
 const ListItemMarker = ({ index }) => {
+  const { isDarkMode } = useTheme();
+
   return (
     <View className="relative items-center justify-center w-12 h-12">
       <SvgXml xml={xml} width="100%" height="100%" />
-      <Text className="text-white font-bold text-sm absolute z-10">{index}</Text>
+      <Text className={`${isDarkMode ? 'text-white' : 'text-indigo-950'} font-bold text-sm absolute z-10`}>{index}</Text>
     </View>
   );
 };

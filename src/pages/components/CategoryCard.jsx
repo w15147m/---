@@ -13,10 +13,10 @@ const CategoryCard = ({ item, onPress }) => {
         style={{ width: 60, height: 60, opacity: 0.3, position: 'absolute', bottom: -10, right: -10 }} 
       />
       <View className="items-center z-10">
-        <Text className="text-white text-2xl font-black mb-1 font-islamic">{item.title_ur}</Text>
-        <Text className="text-white/90 text-md font-bold">{item.title_en}</Text>
+        <Text className="text-indigo-950 dark:text-white text-2xl font-black mb-1 font-islamic">{item.title_ur}</Text>
+        <Text className="text-slate-700 dark:text-white/90 text-md font-bold">{item.title_en}</Text>
       </View>
-      <View className="absolute bottom-4 left-4 bg-indigo-950/80 p-2 rounded-full">
+      <View className="absolute bottom-4 left-4 bg-indigo-900/40 dark:bg-indigo-950/80 p-2 rounded-full">
         <ChevronRightIcon size={16} color="white" />
       </View>
     </TouchableOpacity>

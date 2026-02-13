@@ -33,7 +33,7 @@ const Home = () => {
   ];
 
   return (
-    <View className="flex-1 bg-slate-950">
+    <View className="flex-1 bg-slate-50 dark:bg-slate-950">
       <StatusBar translucent backgroundColor="transparent" barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <SafeAreaView className="flex-1">
         <View className="flex-1 px-6">

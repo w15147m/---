@@ -98,17 +98,31 @@ const AlertModal = () => {
             {config.message}
           </Text>
 
-          <TouchableOpacity
-            onPress={() => {
-              hideAlert();
-              if (config.onConfirm) config.onConfirm();
-            }}
-            className={`${getButtonColor()} w-full py-5 rounded-[24px] shadow-xl shadow-slate-200 dark:shadow-none z-10`}
-          >
-            <Text className="text-white text-center font-bold text-lg">
-              {config.confirmText || 'Got it'}
-            </Text>
-          </TouchableOpacity>
+          {/* Buttons Row */}
+          <View className="flex-row w-full space-x-3 z-10">
+            {/* Cancel Button */}
+            <TouchableOpacity
+              onPress={hideAlert}
+              className="flex-1 py-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800"
+            >
+              <Text className="text-slate-700 dark:text-slate-300 text-center font-bold text-base">
+                Cancel
+              </Text>
+            </TouchableOpacity>
+
+            {/* Confirm Button */}
+            <TouchableOpacity
+              onPress={() => {
+                hideAlert();
+                if (config.onConfirm) config.onConfirm();
+              }}
+              className={`flex-1 py-3.5 rounded-2xl ${getButtonColor()} shadow-lg shadow-slate-200 dark:shadow-none`}
+            >
+              <Text className="text-white text-center font-bold text-base">
+                {config.confirmText || 'Got it'}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </Animated.View>
       </View>
     </Modal>

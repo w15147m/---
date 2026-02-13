@@ -22,7 +22,10 @@ const ArticleListItem = ({ article, index, onPress }) => {
 
       {/* Arabic Name */}
       <View>
-        <Text className="text-sky-400 text-2xl font-islamic text-right">
+        <Text 
+          className="text-sky-500 text-2xl text-right mt-1"
+          style={{ fontFamily: 'KFGQPCUthmanTahaNaskh-Bold', lineHeight: 40 }}
+        >
           {article.title_ar}
         </Text>
       </View>

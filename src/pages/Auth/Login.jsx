@@ -40,6 +40,7 @@ const Login = ({ navigation }) => {
       const response = await loginService(data.email, data.password);
       await login(response);
       showToast('Login successful!', 'success');
+      navigation.navigate('Main');
     } catch (error) {
       setLoginError(error.message || 'Login failed');
     } finally {

@@ -4,12 +4,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { 
   HomeIcon, 
   UserIcon,
-  BookOpenIcon
+  BookOpenIcon,
+  SparklesIcon
 } from 'react-native-heroicons/outline';
 import { 
   HomeIcon as HomeIconSolid,
   UserIcon as UserIconSolid,
-  BookOpenIcon as BookOpenIconSolid
+  BookOpenIcon as BookOpenIconSolid,
+  SparklesIcon as SparklesIconSolid
 } from 'react-native-heroicons/solid';
 
 // Custom Components & Pages
@@ -36,6 +38,17 @@ const TabNavigator = () => {
           title: 'Home',
           tabBarIcon: (props) => <HomeIcon {...props} />,
           tabBarIconActive: (props) => <HomeIconSolid {...props} />
+        }} 
+      />
+
+      <Tab.Screen 
+        name="TaqeebatTab" 
+        component={Explorer} 
+        initialParams={{ initialChapterName: 'تعقیباتِ نماز (Taqeebat-e-Namaz)' }}
+        options={{ 
+          title: 'Taqeebat',
+          tabBarIcon: (props) => <SparklesIcon {...props} />,
+          tabBarIconActive: (props) => <SparklesIconSolid {...props} />
         }} 
       />
 

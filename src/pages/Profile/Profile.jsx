@@ -33,18 +33,42 @@ const Profile = () => {
   const navigation = useNavigation();
   const { isDarkMode } = useTheme();
   
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [passwordModalVisible, setPasswordModalVisible] = useState(false);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  
-  // Auth Guard
-  React.useEffect(() => {
-    if (!user) {
-      navigation.navigate('Auth');
-    }
-  }, [user, navigation]);
+  // No forced redirect here to allow guests to browse other tabs freely.
+  // We handle the guest view in the render instead.
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <SafeAreaView className="flex-1 bg-[#F8FAFC] dark:bg-slate-950">
+        <View className="flex-row justify-between items-center px-6 pt-4 mb-4">
+          <Text className="text-2xl font-black text-slate-900 dark:text-white">Profile</Text>
+          <TouchableOpacity 
+            onPress={() => navigation.openDrawer()}
+            className="p-2 rounded-xl bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800"
+          >
+            <Bars3Icon size={22} color={isDarkMode ? "#f8fafc" : "#1e293b"} />
+          </TouchableOpacity>
+        </View>
+
+        <View className="flex-1 justify-center items-center px-10">
+          <View className="w-20 h-20 bg-indigo-50 dark:bg-indigo-900/20 rounded-3xl items-center justify-center mb-6">
+            <LockClosedIcon size={40} color={isDarkMode ? "#a5b4fc" : "#6366f1"} />
+          </View>
+          <Text className="text-xl font-bold text-slate-900 dark:text-white text-center mb-2">
+            Login Required
+          </Text>
+          <Text className="text-slate-500 dark:text-slate-400 text-center mb-8 leading-5">
+            Log in to your account to manage your profile, unlock achievements, and sync your progress.
+          </Text>
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('Auth')}
+            className="w-full bg-indigo-600 py-4 rounded-2xl shadow-lg shadow-indigo-200 dark:shadow-none"
+          >
+            <Text className="text-white text-center font-bold text-lg">Sign In / Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
 
   const handleUpdateProfile = async (data) => {

@@ -7,10 +7,12 @@ import { useTheme } from '../context/ThemeContext';
 import { Bars3Icon } from 'react-native-heroicons/outline';
 import ChapterContent from './components/ChapterContent';
 
-const Explorer = ({ navigation }) => {
+const Explorer = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [topLevelChapters, setTopLevelChapters] = useState([]);
+  const [subChapters, setSubChapters] = useState([]);
   const [activeTabId, setActiveTabId] = useState(null);
+  const [activeSubTabId, setActiveSubTabId] = useState(null);
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
@@ -18,9 +20,19 @@ const Explorer = ({ navigation }) => {
       try {
         const results = await db.select().from(chapters).where(isNull(chapters.parent_id));
         setTopLevelChapters(results);
-        if (results.length > 0) {
-          setActiveTabId(results[0].id);
+        
+        let initialTabId = null;
+        const initialName = route.params?.initialChapterName;
+        if (initialName) {
+           const initialChapter = results.find(c => c.name === initialName);
+           if (initialChapter) initialTabId = initialChapter.id;
         }
+
+        if (!initialTabId && results.length > 0) {
+          initialTabId = results[0].id;
+        }
+
+        setActiveTabId(initialTabId);
       } catch (error) {
         console.error('Error fetching chapters:', error);
       } finally {
@@ -29,7 +41,30 @@ const Explorer = ({ navigation }) => {
     };
 
     fetchChapters();
-  }, []);
+  }, [route.params?.initialChapterName]);
+
+  // Fetch sub-chapters when active tab changes
+  useEffect(() => {
+    if (!activeTabId) return;
+
+    const fetchSubChapters = async () => {
+      try {
+        const results = await db.select().from(chapters)
+          .where(require('drizzle-orm').eq(chapters.parent_id, activeTabId));
+        
+        setSubChapters(results);
+        if (results.length > 0) {
+          setActiveSubTabId(results[0].id);
+        } else {
+          setActiveSubTabId(null);
+        }
+      } catch (error) {
+        console.error('Error fetching sub-chapters:', error);
+      }
+    };
+
+    fetchSubChapters();
+  }, [activeTabId]);
 
   if (loading) {
     return (
@@ -61,8 +96,8 @@ const Explorer = ({ navigation }) => {
 
       {topLevelChapters.length > 0 ? (
         <View className="flex-1">
-          {/* Custom Horizontal Tabs */}
-          <View className="mb-4">
+          {/* Main Horizontal Tabs */}
+          <View className="mb-2">
             <ScrollView 
               horizontal 
               showsHorizontalScrollIndicator={false}
@@ -85,9 +120,32 @@ const Explorer = ({ navigation }) => {
             </ScrollView>
           </View>
 
+          {/* Sub-Tabs (Specific / General) if exist */}
+          {subChapters.length > 0 && (
+            <View className="bg-white dark:bg-slate-900 mx-4 rounded-2xl shadow-sm mb-4 flex-row p-1 border border-slate-100 dark:border-slate-800">
+              {subChapters.map((sub) => {
+                const isActive = activeSubTabId === sub.id;
+                return (
+                  <TouchableOpacity
+                    key={sub.id}
+                    onPress={() => setActiveSubTabId(sub.id)}
+                    className={`flex-1 py-3 items-center rounded-xl ${isActive ? 'bg-indigo-600 shadow-md' : ''}`}
+                  >
+                    <Text 
+                      style={{ fontFamily: 'AlQuranIndoPak' }}
+                      className={`text-base ${isActive ? 'text-white font-bold' : 'text-slate-400 font-medium'}`}
+                    >
+                      {sub.name}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
+
           {/* Active Tab Content */}
           <View className="flex-1">
-            <ChapterContent chapterId={activeTabId} />
+            <ChapterContent chapterId={activeSubTabId || activeTabId} />
           </View>
         </View>
       ) : (

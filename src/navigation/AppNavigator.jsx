@@ -35,14 +35,25 @@ const AppNavigator = () => {
     );
   }
 
-  // 3. Main Navigation Root - Show Auth or App based on user state
+  // 3. Main Navigation Root
   return (
     <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
-      {user ? (
-        <MainDrawerNavigator />
-      ) : (
-        <AuthNavigator />
-      )}
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {/* Main App is always available (Home, Explorer etc) */}
+        <Stack.Screen name="Main" component={MainDrawerNavigator} />
+        
+        {/* Auth is only available if not logged in */}
+        {!user && (
+          <Stack.Screen 
+            name="Auth" 
+            component={AuthNavigator} 
+            options={{
+              presentation: 'modal',
+              animationTypeForReplace: 'pop',
+            }}
+          />
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

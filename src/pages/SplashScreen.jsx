@@ -54,7 +54,7 @@ const SplashScreen = ({ onFinish }) => {
       >
         {/* Header Section */}
         <View className="items-center mb-12">
-          <Text className="text-white text-4xl font-black mb-2">
+          <Text className="text-white text-5xl font-amiri-bold mb-2">
             Halakat
           </Text>
           <Text className="text-slate-200 text-base text-center font-medium leading-5 px-10">

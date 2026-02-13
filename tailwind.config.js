@@ -9,6 +9,7 @@ module.exports = {
         quran: ['AlQuranIndoPak'],
         nastaliq: ['Mehr-Nastaliq'],
         uthmani: ['KFGQPCUthmanTahaNaskh-Bold'],
+        'uthman-taha': ['KFGQPCUthmanTahaNaskh-Bold'],
       },
     },
   },

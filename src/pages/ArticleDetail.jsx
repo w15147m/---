@@ -67,7 +67,11 @@ const ArticleDetail = ({ route, navigation }) => {
           <ChevronLeftIcon size={24} color="#6366f1" />
         </TouchableOpacity>
         <View className="flex-1">
-          <Text className="text-slate-900 dark:text-white font-black text-xl" numberOfLines={1}>
+          <Text 
+            className="text-slate-900 dark:text-white text-3xl" 
+            numberOfLines={1}
+            style={{ fontFamily: 'Mehr-Nastaliq' }}
+          >
             {article.title_ar}
           </Text>
           <Text className="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-widest">
@@ -85,7 +89,10 @@ const ArticleDetail = ({ route, navigation }) => {
               </Text>
             )}
             
-            <Text className="text-slate-900 dark:text-white text-3xl font-bold text-center leading-[50px] mb-8" style={{ fontFamily: 'System' }}>
+            <Text 
+              className="text-slate-900 dark:text-white text-3xl text-center leading-[60px] mb-8"
+              style={{ fontFamily: 'KFGQPCUthmanTahaNaskh-Bold' }}
+            >
               {item.arabic_text}
             </Text>
 

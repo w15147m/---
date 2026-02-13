@@ -53,7 +53,7 @@ const ChapterContent = ({ chapterId }) => {
             className="bg-white dark:bg-slate-900 p-5 rounded-3xl flex-row items-center border border-slate-50 dark:border-slate-800 shadow-sm"
           >
             <View className="flex-1">
-              <Text className="text-slate-900 dark:text-white font-bold text-lg mb-1">{article.title_ar}</Text>
+              <Text className="text-slate-900 dark:text-white font-uthman-taha text-xl mb-1">{article.title_ar}</Text>
               <Text className="text-slate-500 dark:text-slate-400 text-sm">{article.title_en}</Text>
             </View>
             <ChevronRightIcon size={20} color="#94a3b8" />

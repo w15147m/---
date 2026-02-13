@@ -132,8 +132,7 @@ const Explorer = ({ navigation, route }) => {
                     className={`flex-1 py-3 items-center rounded-xl ${isActive ? 'bg-indigo-600 shadow-md' : ''}`}
                   >
                     <Text 
-                      style={{ fontFamily: 'AlQuranIndoPak' }}
-                      className={`text-base ${isActive ? 'text-white font-bold' : 'text-slate-400 font-medium'}`}
+                      className={`text-lg font-quran ${isActive ? 'text-white font-bold' : 'text-slate-400 font-medium'}`}
                     >
                       {sub.name}
                     </Text>

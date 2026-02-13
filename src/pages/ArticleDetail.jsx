@@ -58,24 +58,21 @@ const ArticleDetail = ({ route, navigation }) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white dark:bg-slate-950">
-      {/* Header */}
-      <View className="flex-row items-center px-6 py-4 border-b border-slate-50 dark:border-slate-900">
+      {/* Header with extra top spacing */}
+      <View className="flex-row items-center px-6 pt-10 pb-4 border-b border-slate-50 dark:border-slate-900">
         <TouchableOpacity 
           onPress={() => navigation.goBack()}
           className="mr-4 p-2 rounded-xl bg-slate-50 dark:bg-slate-900"
         >
-          <ChevronLeftIcon size={24} color="#6366f1" />
+          <ChevronLeftIcon size={24} color="#0ea5e9" />
         </TouchableOpacity>
         <View className="flex-1">
           <Text 
-            className="text-slate-900 dark:text-white text-3xl" 
+            className="text-slate-900 dark:text-white text-3xl text-right" 
             numberOfLines={1}
             style={{ fontFamily: 'Mehr-Nastaliq' }}
           >
             {article.title_ar}
-          </Text>
-          <Text className="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-widest">
-            Detail View
           </Text>
         </View>
       </View>

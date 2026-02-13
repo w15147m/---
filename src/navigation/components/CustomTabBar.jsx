@@ -5,6 +5,15 @@ import { useTheme } from '../../context/ThemeContext';
 const CustomTabBar = ({ state, descriptors, navigation }) => {
   const { isDarkMode } = useTheme();
 
+  // Get options for the current active route
+  const currentRoute = state.routes[state.index];
+  const currentOptions = descriptors[currentRoute.key].options;
+
+  // Hide the entire tab bar if requested
+  if (currentOptions.tabBarStyle?.display === 'none') {
+    return null;
+  }
+
   return (
     <View 
       className="bg-white dark:bg-slate-900 p-2 rounded-t-[30px] flex-row items-center px-8 shadow-2xl border-t border-slate-50 dark:border-slate-800 absolute bottom-0 left-0 right-0"

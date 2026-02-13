@@ -67,7 +67,8 @@ const TabNavigator = () => {
         component={ArticleDetail} 
         options={{ 
           title: 'Detail',
-          tabBarItemStyle: { display: 'none' }
+          tabBarItemStyle: { display: 'none' },
+          tabBarStyle: { display: 'none' }
         }} 
       />
 

@@ -35,13 +35,14 @@ const AppNavigator = () => {
     );
   }
 
-  // 3. Main Navigation Root
+  // 3. Main Navigation Root - Show Auth or App based on user state
   return (
     <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="App">
-        <Stack.Screen name="App" component={MainDrawerNavigator} />
-        <Stack.Screen name="Auth" component={AuthNavigator} />
-      </Stack.Navigator>
+      {user ? (
+        <MainDrawerNavigator />
+      ) : (
+        <AuthNavigator />
+      )}
     </NavigationContainer>
   );
 };

@@ -10,7 +10,7 @@ module.exports = {
         nastaliq: ['Mehr-Nastaliq'],
         uthmani: ['KFGQPCUthmanTahaNaskh-Bold'],
         'uthman-taha': ['KFGQPCUthmanTahaNaskh-Bold'],
-        islamic: ['islamic_font'],
+        islamic: ['islamic_font', 'arab quran islamic 140'],
       },
     },
   },

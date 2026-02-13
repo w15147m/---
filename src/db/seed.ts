@@ -13,18 +13,27 @@ export const seedDatabase = async () => {
     console.log('🌱 Seeding database...');
 
     // 1. Create a Chapter
-    const [chapter] = await db.insert(chapters).values({
+    await db.insert(chapters).values({
       name: 'تعقیباتِ نماز (Taqeebat-e-Namaz)',
       thumbnail_url: 'https://example.com/taqeebat.png',
-    }).returning();
+    });
+
+    // Get the created chapter
+    const [chapter] = await db.select().from(chapters)
+      .where(require('drizzle-orm').eq(chapters.name, 'تعقیباتِ نماز (Taqeebat-e-Namaz)'))
+      .limit(1);
 
     // 2. Create an Article in that Chapter
-    const [article] = await db.insert(articles).values({
+    await db.insert(articles).values({
       chapter_id: chapter.id,
       title_ar: 'تعقيب صلاة الظهر',
       title_en: 'Taqeeb of Zuhr Prayer',
       short_description: 'Recommended prayers after Zuhr namaz',
-    }).returning();
+    });
+
+    const [article] = await db.select().from(articles)
+      .where(require('drizzle-orm').eq(articles.title_en, 'Taqeeb of Zuhr Prayer'))
+      .limit(1);
 
     // 3. Create Items for the Article
     await db.insert(items).values([
@@ -46,10 +55,14 @@ export const seedDatabase = async () => {
     ]);
 
     // 4. Create an Event
-    const [event] = await db.insert(events).values({
+    await db.insert(events).values({
       name: 'شبِ قدر (Shab-e-Qadr)',
       details: 'The night of power in the month of Ramadan',
-    }).returning();
+    });
+
+    const [event] = await db.select().from(events)
+      .where(require('drizzle-orm').eq(events.name, 'شبِ قدر (Shab-e-Qadr)'))
+      .limit(1);
 
     // 5. Link Article to Event
     await db.insert(article_event).values({

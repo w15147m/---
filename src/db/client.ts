@@ -89,6 +89,16 @@ export const runMigrations = async () => {
       });
     });
 
+    // Helper to check if a column exists in a table (useful for idempotent migrations)
+    const columnExists = async (tableName: string, columnName: string): Promise<boolean> => {
+      try {
+        const res: any = await execute(`PRAGMA table_info(${tableName})`);
+        return res.rows.length > 0 && res.rows.some((col: any) => col.name === columnName);
+      } catch {
+        return false;
+      }
+    };
+
     // Create migrations table
     await execute(`
       CREATE TABLE IF NOT EXISTS __drizzle_migrations (
@@ -117,16 +127,40 @@ export const runMigrations = async () => {
 
       if (res.rows.length > 0) continue;
 
-      const sql = (migrations.migrations as any)[key];
-      if (!sql) throw new Error(`Migration SQL for ${key} is missing`);
+      let sql = (migrations.migrations as any)[key];
+      // Handle babel-plugin-inline-import default export
+      if (sql && typeof sql === 'object' && 'default' in sql) {
+        sql = sql.default;
+      }
 
-      const statements = sql.split('--> statement-breakpoint');
+      if (!sql || typeof sql !== 'string') {
+        throw new Error(`Migration SQL for ${key} is missing or invalid`);
+      }
+
+      // Split by statement-breakpoint (handle optional spaces)
+      const statements = sql.split(/-->\s*statement-breakpoint/);
 
       for (const statement of statements) {
         const trimmed = statement.trim();
-        if (trimmed) {
-          const finalSql = trimmed.replace(/CREATE TABLE (`?\w+`?)/i, 'CREATE TABLE IF NOT EXISTS $1');
+        if (!trimmed) continue;
+
+        // Enhanced idempotent CREATE TABLE & DROP TABLE
+        let finalSql = trimmed
+          .replace(/CREATE TABLE\s+(?!IF NOT EXISTS)(`?\w+`?)/i, 'CREATE TABLE IF NOT EXISTS $1')
+          .replace(/DROP TABLE\s+(?!IF EXISTS)(`?\w+`?)/i, 'DROP TABLE IF EXISTS $1');
+
+        // Handle ALTER TABLE ADD COLUMN idempotency
+        const alterMatch = finalSql.match(/ALTER TABLE [`']?(\w+)[`']? ADD [`']?(\w+)[`']?/i);
+        if (alterMatch) {
+          const [, tableName, columnName] = alterMatch;
+          if (await columnExists(tableName, columnName)) continue;
+        }
+
+        try {
           await execute(finalSql);
+        } catch (e) {
+          console.error(`Error executing migration ${key} statement:`, finalSql, e);
+          throw e;
         }
       }
 

@@ -34,23 +34,20 @@ const Home = () => {
   ];
 
   return (
-    <View className="flex-1">
-      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
-      {/* Background Image */}
-      <ImageBackground 
-        source={require('../assets/ui-assets/background.png')}
-        style={{ flex: 1 }}
-        resizeMode="cover"
-      >
-        <SafeAreaView className="flex-1">
-          <View className="flex-1 px-6">
-            
-            {/* Top Navigation - Now Modular */}
-            <HomeHeader onOpenDrawer={() => navigation.openDrawer()} />
+    <View className="flex-1 bg-[#F8FAFC] dark:bg-slate-950">
+      <StatusBar translucent backgroundColor="transparent" barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <SafeAreaView className="flex-1">
+        <View className="flex-1 px-6">
+          
+          {/* Top Navigation - Now Modular */}
+          <HomeHeader 
+            onOpenDrawer={() => navigation.openDrawer()} 
+            iconColor={isDarkMode ? "white" : "#0f172a"}
+          />
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
-              
-              {/* Hero Image Section - Reduced Margin */}
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+            
+            {/* Hero Image Section - Reduced Margin */}
               <View className="items-center justify-center my-4">
                 <Image 
                   source={require('../assets/ui-assets/Quran.png')}
@@ -81,7 +78,6 @@ const Home = () => {
             </ScrollView>
           </View>
         </SafeAreaView>
-      </ImageBackground>
     </View>
   );
 };

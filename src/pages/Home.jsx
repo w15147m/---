@@ -6,72 +6,92 @@ import {
   ScrollView, 
   Image,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  ImageBackground,
+  StatusBar
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { 
-  Bars3Icon,
-  FireIcon,
-  SparklesIcon
-} from 'react-native-heroicons/outline';
-
-const { width } = Dimensions.get('window');
+  Bars3BottomLeftIcon,
+} from 'react-native-heroicons/solid';
 
 import { useTheme } from '../context/ThemeContext';
+import CategoryCard from './components/CategoryCard';
+import LastReadCard from './components/LastReadCard';
+
+const { width } = Dimensions.get('window');
 
 const Home = () => {
   const navigation = useNavigation();
   const { isDarkMode } = useTheme();
 
+  const categories = [
+    { id: '1', title_ur: 'سورۃ', title_en: 'Surah', icon: require('../assets/ui-assets/quranSura.png') },
+    { id: '2', title_ur: 'پارہ', title_en: 'Para', icon: require('../assets/ui-assets/quranSura.png') },
+    { id: '3', title_ur: 'سورۃ یس', title_en: 'Surah Yasin', icon: require('../assets/ui-assets/quranSura.png') },
+    { id: '4', title_ur: 'آیت الکرسی', title_en: 'Ait Al-kursi', icon: require('../assets/ui-assets/quranSura.png') },
+  ];
+
   return (
-    <SafeAreaView className="flex-1 bg-[#F8FAFC] dark:bg-slate-950">
-      <ScrollView 
-        className="flex-1" 
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
+    <View className="flex-1">
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      {/* Background Image */}
+      <ImageBackground 
+        source={require('../assets/ui-assets/background.png')}
+        style={{ flex: 1 }}
+        resizeMode="cover"
       >
-        {/* Header */}
-        <View className="flex-row justify-between items-center px-6 pt-4 mb-6">
-          <View>
-            <Text className="text-slate-400 dark:text-slate-400 font-bold text-xs uppercase tracking-widest mb-1">
-              Welcome Back
-            </Text>
-            <Text className="text-2xl font-black text-slate-900 dark:text-white">Starter Kit</Text>
-          </View>
-          <TouchableOpacity 
-            className="p-2 rounded-xl bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800"
-            onPress={() => navigation.openDrawer()}
-          >
-            <Bars3Icon size={24} color={isDarkMode ? "#f8fafc" : "#1e293b"} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Hero Card */}
-        <View className="mx-6 bg-indigo-600 dark:bg-indigo-500 rounded-[32px] p-6 mb-8 overflow-hidden relative shadow-lg shadow-indigo-200 dark:shadow-none">
-          <View className="z-10">
-            <Text className="text-indigo-100 font-bold mb-2">Welcome</Text>
-            <Text className="text-3xl font-black text-white mb-4">Welcome to Starter Kit! 🚀</Text>
-          </View>
-          
-          {/* Abstract circles */}
-          <View className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full" />
-          <View className="absolute -bottom-20 -left-10 w-60 h-60 bg-white/5 rounded-full" />
-        </View>
-
-        {/* Content */}
-        <View className="px-6">
-          <View className="items-center py-10 bg-white dark:bg-slate-900 rounded-[32px] border border-slate-50 dark:border-slate-800 shadow-sm">
-            <View className="w-16 h-16 bg-indigo-50 dark:bg-indigo-900/20 rounded-full items-center justify-center mb-4">
-              <SparklesIcon size={32} color={isDarkMode ? "#a5b4fc" : "#6366f1"} />
+        <SafeAreaView className="flex-1">
+          <View className="flex-1 px-6">
+            
+            {/* Top Navigation - Reduced Padding */}
+            <View className="flex-row justify-between items-center py-2 mt-2">
+              <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                <Bars3BottomLeftIcon size={30} color="white" />
+              </TouchableOpacity>
+              <View className="w-10 h-10 rounded-full border-2 border-white/50 overflow-hidden">
+                <Image 
+                  source={{ uri: 'https://i.pravatar.cc/150?u=muslim_user' }} 
+                  className="w-full h-full"
+                />
+              </View>
             </View>
-            <Text className="text-slate-900 dark:text-white font-bold text-lg mb-2">Welcome to Starter Kit</Text>
-            <Text className="text-slate-400 dark:text-slate-500 text-center px-10 leading-5">
-              Everything looks good! Enjoy your day.
-            </Text>
+
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+              
+              {/* Hero Image Section - Reduced Margin */}
+              <View className="items-center justify-center my-4">
+                <Image 
+                  source={require('../assets/ui-assets/Quran.png')}
+                  style={{ width: width * 0.7, height: width * 0.5 }}
+                  resizeMode="contain"
+                />
+              </View>
+
+              {/* Last Read Card - Now Reusable */}
+              <LastReadCard 
+                title="Al-Fatihah"
+                subtitle="Ayah No: 1"
+                icon={require('../assets/ui-assets/quranSura.png')}
+                onPressBookmark={() => console.log('Bookmark pressed')}
+              />
+
+              {/* Categories Grid - Now Reusable */}
+              <View className="flex-row flex-wrap justify-between">
+                {categories.map((item) => (
+                  <CategoryCard 
+                    key={item.id} 
+                    item={item} 
+                    onPress={() => console.log(`${item.title_en} pressed`)} 
+                  />
+                ))}
+              </View>
+
+            </ScrollView>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </SafeAreaView>
+      </ImageBackground>
+    </View>
   );
 };
 

@@ -18,6 +18,7 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import CategoryCard from './components/CategoryCard';
 import LastReadCard from './components/LastReadCard';
+import HomeHeader from './components/HomeHeader';
 
 const { width } = Dimensions.get('window');
 
@@ -44,18 +45,8 @@ const Home = () => {
         <SafeAreaView className="flex-1">
           <View className="flex-1 px-6">
             
-            {/* Top Navigation - Reduced Padding */}
-            <View className="flex-row justify-between items-center py-2 mt-2">
-              <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                <Bars3BottomLeftIcon size={30} color="white" />
-              </TouchableOpacity>
-              <View className="w-10 h-10 rounded-full border-2 border-white/50 overflow-hidden">
-                <Image 
-                  source={{ uri: 'https://i.pravatar.cc/150?u=muslim_user' }} 
-                  className="w-full h-full"
-                />
-              </View>
-            </View>
+            {/* Top Navigation - Now Modular */}
+            <HomeHeader onOpenDrawer={() => navigation.openDrawer()} />
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
               

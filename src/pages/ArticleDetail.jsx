@@ -64,7 +64,7 @@ const ArticleDetail = ({ route, navigation }) => {
   return (
     <SafeAreaView className="flex-1 bg-slate-50 dark:bg-slate-950">
       {/* Header Title Card */}
-      <View className="items-center px-2 pt-10 pb-4">
+      <View className="items-center px-2 pt-14 pb-4">
         <View className="bg-white dark:bg-slate-900 w-full rounded-2xl py-4 shadow-sm border border-slate-100 dark:border-slate-800">
           <Text 
             className="text-slate-900 dark:text-white text-center" 

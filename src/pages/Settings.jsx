@@ -1,74 +1,161 @@
 import React from 'react';
-import { View, Text, SafeAreaView, ScrollView } from 'react-native';
-import Slider from '@react-native-community/slider';
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { MinusIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { useTheme } from '../context/ThemeContext';
 import { useFont } from '../context/FontContext';
 
 const Settings = () => {
   const { isDarkMode } = useTheme();
-  const { arabicSize, setFontSize } = useFont();
+  const { arabicSize, translationSize, headerSize, listTitleSize, setFontSize } = useFont();
 
-  const handleFontSizeChange = (value) => {
-    setFontSize('arabicSize', value);
+  const fontSettings = [
+    {
+      key: 'arabicSize',
+      label: 'Arabic Text Size',
+      currentSize: arabicSize,
+      min: 20,
+      max: 44,
+      preview: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ',
+      description: 'Main Arabic content in articles'
+    },
+    {
+      key: 'translationSize',
+      label: 'Translation Text Size',
+      currentSize: translationSize,
+      min: 14,
+      max: 28,
+      preview: 'In the name of Allah, the Most Gracious, the Most Merciful',
+      description: 'Urdu and English translations'
+    },
+    {
+      key: 'headerSize',
+      label: 'Header Text Size',
+      currentSize: headerSize,
+      min: 18,
+      max: 36,
+      preview: 'دُعَاءُ الصَّبَاحِ',
+      description: 'Article titles and headers'
+    },
+    {
+      key: 'listTitleSize',
+      label: 'List Item Title Size',
+      currentSize: listTitleSize,
+      min: 16,
+      max: 30,
+      preview: 'تَعْقِيبَاتِ نَمَازِ صُبْح',
+      description: 'Prayer and chapter list items'
+    }
+  ];
+
+  const handleDecrease = (key, currentSize, min) => {
+    if (currentSize > min) {
+      setFontSize(key, currentSize - 1);
+    }
+  };
+
+  const handleIncrease = (key, currentSize, max) => {
+    if (currentSize < max) {
+      setFontSize(key, currentSize + 1);
+    }
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-50 dark:bg-slate-950">
+    <SafeAreaView className="flex-1 mt-10 bg-slate-50 dark:bg-slate-950">
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 16 }}>
-        {/* Header */}
-        <View className="mb-8">
-          <Text className="text-3xl font-bold text-slate-900 dark:text-white">
-            Settings
-          </Text>
-          <Text className="text-slate-500 dark:text-slate-400 mt-1">
-            Customize your reading experience
-          </Text>
-        </View>
+      
+        {/* Font Size Controls */}
+        {fontSettings.map((setting, index) => (
+          <View 
+            key={setting.key}
+            className={`bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 ${index < fontSettings.length - 1 ? 'mb-4' : ''}`}
+          >
+            {/* Label */}
+            <View className="mb-3">
+              <Text className="text-lg font-bold text-slate-900 dark:text-white">
+                {setting.label}
+              </Text>
+              <Text className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                {setting.description}
+              </Text>
+            </View>
 
-        {/* Font Size Section */}
-        <View className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
-          <Text className="text-lg font-bold text-slate-900 dark:text-white mb-4">
-            Font Size
-          </Text>
+            {/* Live Preview */}
+            <View className="items-center py-6 mb-4 bg-slate-50 dark:bg-slate-800 rounded-xl">
+              <Text 
+                className="text-slate-900 dark:text-white text-center px-4"
+                style={{ 
+                  fontFamily: setting.key === 'translationSize' ? undefined : 'KFGQPCUthmanTahaNaskh-Bold',
+                  fontSize: setting.currentSize,
+                  lineHeight: setting.currentSize * 1.6
+                }}
+              >
+                {setting.preview}
+              </Text>
+            </View>
 
-          {/* Live Preview */}
-          <View className="items-center py-8 mb-6 bg-slate-50 dark:bg-slate-800 rounded-xl">
-            <Text 
-              className="text-slate-900 dark:text-white text-center"
-              style={{ 
-                fontFamily: 'KFGQPCUthmanTahaNaskh-Bold',
-                fontSize: arabicSize,
-                lineHeight: arabicSize * 1.6
-              }}
-            >
-              بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
-            </Text>
+            {/* Size Controls */}
+            <View className="flex-row items-center justify-between mb-3">
+              {/* Decrease Button */}
+              <TouchableOpacity
+                onPress={() => handleDecrease(setting.key, setting.currentSize, setting.min)}
+                disabled={setting.currentSize <= setting.min}
+                className={`w-12 h-12 rounded-full items-center justify-center ${
+                  setting.currentSize <= setting.min 
+                    ? 'bg-slate-200 dark:bg-slate-800' 
+                    : 'bg-indigo-100 dark:bg-indigo-900/30'
+                }`}
+                activeOpacity={0.7}
+              >
+                <MinusIcon 
+                  size={24} 
+                  color={setting.currentSize <= setting.min ? '#94a3b8' : '#6366f1'} 
+                />
+              </TouchableOpacity>
+
+              {/* Progress Bar */}
+              <View className="flex-1 mx-4">
+                <View className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <View 
+                    className="h-full bg-indigo-600"
+                    style={{ 
+                      width: `${((setting.currentSize - setting.min) / (setting.max - setting.min)) * 100}%` 
+                    }}
+                  />
+                </View>
+              </View>
+
+              {/* Increase Button */}
+              <TouchableOpacity
+                onPress={() => handleIncrease(setting.key, setting.currentSize, setting.max)}
+                disabled={setting.currentSize >= setting.max}
+                className={`w-12 h-12 rounded-full items-center justify-center ${
+                  setting.currentSize >= setting.max 
+                    ? 'bg-slate-200 dark:bg-slate-800' 
+                    : 'bg-indigo-100 dark:bg-indigo-900/30'
+                }`}
+                activeOpacity={0.7}
+              >
+                <PlusIcon 
+                  size={24} 
+                  color={setting.currentSize >= setting.max ? '#94a3b8' : '#6366f1'} 
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* Size Label */}
+            <View className="flex-row justify-between">
+              <Text className="text-sm text-slate-500 dark:text-slate-400">
+                Small ({setting.min})
+              </Text>
+              <Text className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                {Math.round(setting.currentSize)}
+              </Text>
+              <Text className="text-sm text-slate-500 dark:text-slate-400">
+                Large ({setting.max})
+              </Text>
+            </View>
           </View>
-
-          {/* Slider */}
-          <View className="mb-2">
-            <Slider
-              style={{ width: '100%', height: 40 }}
-              minimumValue={20}
-              maximumValue={50}
-              step={1}
-              value={arabicSize}
-              onValueChange={handleFontSizeChange}
-              minimumTrackTintColor="#6366f1"
-              maximumTrackTintColor={isDarkMode ? '#475569' : '#cbd5e1'}
-              thumbTintColor="#6366f1"
-            />
-          </View>
-
-          {/* Size Label */}
-          <View className="flex-row justify-between">
-            <Text className="text-sm text-slate-500 dark:text-slate-400">Small (20)</Text>
-            <Text className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
-              {Math.round(arabicSize)}
-            </Text>
-            <Text className="text-sm text-slate-500 dark:text-slate-400">Large (50)</Text>
-          </View>
-        </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

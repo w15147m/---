@@ -12,7 +12,10 @@ import { items, articles } from '../db/schema';
 import { eq, asc } from 'drizzle-orm';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 
+import { useTheme } from '../context/ThemeContext';
+
 const ArticleDetail = ({ route, navigation }) => {
+  const { isDarkMode } = useTheme();
   const { articleId } = route.params;
   const [loading, setLoading] = useState(true);
   const [article, setArticle] = useState(null);
@@ -57,60 +60,87 @@ const ArticleDetail = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white dark:bg-slate-950">
-      {/* Header with extra top spacing */}
-      <View className="flex-row items-center px-6 pt-10 pb-4 border-b border-slate-50 dark:border-slate-900">
-        <TouchableOpacity 
-          onPress={() => navigation.goBack()}
-          className="mr-4 p-2 rounded-xl bg-slate-50 dark:bg-slate-900"
-        >
-          <ChevronLeftIcon size={24} color="#0ea5e9" />
-        </TouchableOpacity>
-        <View className="flex-1">
+    <SafeAreaView className="flex-1 bg-slate-50 dark:bg-slate-950">
+      {/* Header Title Card */}
+      <View className="items-center px-2 pt-3 pb-4">
+        <View className="bg-white dark:bg-slate-900 w-full rounded-2xl py-4 shadow-sm border border-slate-100 dark:border-slate-800">
           <Text 
-            className="text-slate-900 dark:text-white text-3xl text-right" 
+            className="text-slate-900 dark:text-white text-2xl text-center" 
             numberOfLines={1}
-            style={{ fontFamily: 'Mehr-Nastaliq' }}
+            style={{ 
+              fontFamily: 'KFGQPCUthmanTahaNaskh-Bold',
+              lineHeight: 40
+            }}
           >
             {article.title_ar}
           </Text>
         </View>
       </View>
 
-      <ScrollView className="flex-1" contentContainerStyle={{ padding: 20 }}>
-        {articleItems.map((item, index) => (
-          <View key={item.id} className={`mb-8 p-6 rounded-[32px] ${index % 2 === 0 ? 'bg-indigo-50/30 dark:bg-indigo-900/10' : 'bg-slate-50/50 dark:bg-slate-900/20'}`}>
-            {item.instruction && (
-              <Text className="text-indigo-600 dark:text-indigo-400 font-bold text-center mb-6 italic">
-                {item.instruction}
-              </Text>
-            )}
-            
-            <Text 
-              className="text-slate-900 dark:text-white text-3xl text-center leading-[60px] mb-8"
-              style={{ fontFamily: 'KFGQPCUthmanTahaNaskh-Bold' }}
-            >
-              {item.arabic_text}
-            </Text>
+      <ScrollView className="flex-1" contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 40 }}>
+        {/* Main Content Card */}
+        <View className="bg-white dark:bg-slate-900 rounded-[20px] overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+          {articleItems.map((item, index) => (
+            <View key={item.id} className="mb-0">
+              {/* Lined Background Container */}
+              <View 
+                className="relative py-0"
+                style={{
+                  backgroundColor: isDarkMode 
+                    ? (index % 2 === 0 ? '#0f172a' : '#1e293b') // slate-900 : slate-800
+                    : (index % 2 === 0 ? '#ffffff' : '#fcfcfc') 
+                }}
+              >
+                {/* Notebook Lines Background */}
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: -1 }}>
+                  {Array.from({ length: Math.ceil((item.arabic_text?.length || 0) / 40) + 4 }).map((_, i) => (
+                    <View 
+                      key={i} 
+                      style={{ 
+                        height: 60, 
+                        borderBottomWidth: 1, 
+                        borderBottomColor: isDarkMode ? '#334155' : '#cbd5e1', // slate-700 : slate-300
+                        width: '100%'
+                      }} 
+                    />
+                  ))}
+                </View>
 
-            <View className="space-y-4">
-              {item.urdu_translation && (
-                <View className="border-t border-slate-100 dark:border-slate-800 pt-4">
-                   <Text className="text-slate-600 dark:text-slate-300 text-center text-lg leading-7">
-                    {item.urdu_translation}
+                {item.instruction && (
+                  <Text className="text-indigo-600 dark:text-indigo-400 font-bold text-center italic px-2 mt-6 mb-2">
+                    ({item.instruction})
                   </Text>
+                )}
+                
+                <Text 
+                  className="text-slate-900 dark:text-white text-3xl text-center px-1"
+                  style={{ 
+                    fontFamily: 'KFGQPCUthmanTahaNaskh-Bold',
+                    lineHeight: 60, 
+                    paddingTop: 8, // Adjust to sit on the line
+                    paddingBottom: 12 // Clear descenders
+                  }}
+                >
+                  {item.arabic_text}
+                </Text>
+
+                {/* Sub-content (Translations) */}
+                <View className="px-4 pb-8 space-y-4 pt-4">
+                  {item.urdu_translation && (
+                     <Text className="text-slate-600 dark:text-slate-300 text-center text-lg leading-8 font-serif">
+                      {item.urdu_translation}
+                    </Text>
+                  )}
+                  {item.english_translation && (
+                    <Text className="text-slate-400 dark:text-slate-500 text-center text-sm leading-6 italic">
+                      {item.english_translation}
+                    </Text>
+                  )}
                 </View>
-              )}
-              {item.english_translation && (
-                <View className="border-t border-slate-100 dark:border-slate-800 pt-4">
-                  <Text className="text-slate-400 dark:text-slate-500 text-center text-sm leading-5 italic">
-                    {item.english_translation}
-                  </Text>
-                </View>
-              )}
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

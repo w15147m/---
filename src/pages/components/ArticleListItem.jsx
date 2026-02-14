@@ -7,7 +7,7 @@ const ArticleListItem = ({ article, index, onPress }) => {
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.7}
-      className="flex-row-reverse items-center py-4 border-b border-slate-100 dark:border-white/10"
+      className="flex-row-reverse items-center py-2.5 border-b border-slate-300 dark:border-white/20"
     >
       {/* Number Index Marker (Right Side) */}
       <View className="pl-4">
@@ -17,8 +17,8 @@ const ArticleListItem = ({ article, index, onPress }) => {
       {/* Content Section (Arabic Title) */}
       <View className="flex-1 justify-center">
         <Text 
-          className="text-sky-500 text-2xl text-right"
-          style={{ fontFamily: 'KFGQPCUthmanTahaNaskh-Bold', lineHeight: 45 }}
+          className="text-slate-900 dark:text-white text-xl text-right font-bold"
+          style={{ fontFamily: 'KFGQPCUthmanTahaNaskh-Bold', lineHeight: 38 }}
         >
           {article.title_ar}
         </Text>

@@ -10,6 +10,8 @@ import {
   TouchableOpacity
 } from 'react-native';
 
+import { APP_CONFIG } from '../common/utils/appConfig';
+
 const { width, height } = Dimensions.get('window');
 
 const SplashScreen = ({ onFinish }) => {
@@ -68,14 +70,14 @@ const SplashScreen = ({ onFinish }) => {
             textShadowRadius: 10
           }}
         >
-          مفاتیح الجنان
+          {APP_CONFIG.appName}
         </Text>
       </Animated.View>
 
       {/* Subtle version indicator */}
       <View className="absolute bottom-10 items-center w-full">
         <Text className="text-white/40 text-[10px] uppercase font-bold tracking-[3px]">
-          Premium Edition
+          {APP_CONFIG.edition} v{APP_CONFIG.version}
         </Text>
       </View>
     </View>

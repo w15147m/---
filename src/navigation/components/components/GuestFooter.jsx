@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { ArrowLeftOnRectangleIcon } from 'react-native-heroicons/outline';
+import { APP_CONFIG } from '../../../common/utils/appConfig';
 
 const GuestFooter = ({ isDarkMode, onLoginPress }) => {
   return (
@@ -18,7 +19,7 @@ const GuestFooter = ({ isDarkMode, onLoginPress }) => {
       
       <View className="mt-6">
         <Text className="text-slate-300 dark:text-slate-600 text-[10px] font-black uppercase tracking-[2px] text-center">
-          VERSION 1.0.2 • PREMIUM
+          {APP_CONFIG.appNameEn} V{APP_CONFIG.version} • {APP_CONFIG.edition}
         </Text>
       </View>
     </View>

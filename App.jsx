@@ -27,6 +27,8 @@ const MainApp = () => {
   );
 };
 
+import { FontProvider } from './src/context/FontContext';
+
 function App() {
   useEffect(() => {
     const initializeApp = async () => {
@@ -45,11 +47,13 @@ function App() {
 
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <AlertProvider>
-          <MainApp />
-        </AlertProvider>
-      </AuthProvider>
+      <FontProvider>
+        <AuthProvider>
+          <AlertProvider>
+            <MainApp />
+          </AlertProvider>
+        </AuthProvider>
+      </FontProvider>
     </ThemeProvider>
   );
 }

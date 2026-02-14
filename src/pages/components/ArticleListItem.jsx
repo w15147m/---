@@ -2,7 +2,11 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import ListItemMarker from './ListItemMarker';
 
+import { useFont } from '../../context/FontContext';
+
 const ArticleListItem = ({ article, index, onPress }) => {
+  const { listTitleSize } = useFont();
+
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -17,8 +21,12 @@ const ArticleListItem = ({ article, index, onPress }) => {
       {/* Content Section (Arabic Title) */}
       <View className="flex-1 justify-center">
         <Text 
-          className="text-slate-900 dark:text-white text-xl text-right font-bold"
-          style={{ fontFamily: 'KFGQPCUthmanTahaNaskh-Bold', lineHeight: 38 }}
+          className="text-slate-900 dark:text-white text-right font-bold"
+          style={{ 
+            fontFamily: 'KFGQPCUthmanTahaNaskh-Bold', 
+            fontSize: listTitleSize,
+            lineHeight: listTitleSize * 1.8 
+          }}
         >
           {article.title_ar}
         </Text>

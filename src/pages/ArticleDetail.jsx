@@ -13,9 +13,11 @@ import { eq, asc } from 'drizzle-orm';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 
 import { useTheme } from '../context/ThemeContext';
+import { useFont } from '../context/FontContext';
 
 const ArticleDetail = ({ route, navigation }) => {
   const { isDarkMode } = useTheme();
+  const { arabicSize, translationSize, headerSize } = useFont();
   const { articleId } = route.params;
   const [loading, setLoading] = useState(true);
   const [article, setArticle] = useState(null);
@@ -65,11 +67,12 @@ const ArticleDetail = ({ route, navigation }) => {
       <View className="items-center px-2 pt-3 pb-4">
         <View className="bg-white dark:bg-slate-900 w-full rounded-2xl py-4 shadow-sm border border-slate-100 dark:border-slate-800">
           <Text 
-            className="text-slate-900 dark:text-white text-2xl text-center" 
+            className="text-slate-900 dark:text-white text-center" 
             numberOfLines={1}
             style={{ 
               fontFamily: 'KFGQPCUthmanTahaNaskh-Bold',
-              lineHeight: 40
+              fontSize: headerSize,
+              lineHeight: headerSize * 1.6
             }}
           >
             {article.title_ar}
@@ -113,9 +116,10 @@ const ArticleDetail = ({ route, navigation }) => {
                 )}
                 
                 <Text 
-                  className="text-slate-900 dark:text-white text-3xl text-center px-1"
+                  className="text-slate-900 dark:text-white text-center px-1"
                   style={{ 
                     fontFamily: 'KFGQPCUthmanTahaNaskh-Bold',
+                    fontSize: arabicSize,
                     lineHeight: 60, 
                     paddingTop: 8, // Adjust to sit on the line
                     paddingBottom: 12 // Clear descenders
@@ -127,12 +131,18 @@ const ArticleDetail = ({ route, navigation }) => {
                 {/* Sub-content (Translations) */}
                 <View className="px-4 pb-8 space-y-4 pt-4">
                   {item.urdu_translation && (
-                     <Text className="text-slate-600 dark:text-slate-300 text-center text-lg leading-8 font-serif">
+                     <Text 
+                       className="text-slate-600 dark:text-slate-300 text-center font-serif"
+                       style={{ fontSize: translationSize, lineHeight: translationSize * 1.6 }}
+                     >
                       {item.urdu_translation}
                     </Text>
                   )}
                   {item.english_translation && (
-                    <Text className="text-slate-400 dark:text-slate-500 text-center text-sm leading-6 italic">
+                    <Text 
+                      className="text-slate-400 dark:text-slate-500 text-center italic"
+                      style={{ fontSize: translationSize - 4, lineHeight: (translationSize - 4) * 1.6 }}
+                    >
                       {item.english_translation}
                     </Text>
                   )}

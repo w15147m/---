@@ -6,3 +6,10 @@ export const APP_CONFIG = {
   version: packageJson.version,
   edition: 'Premium Edition',
 };
+
+export const DEFAULT_FONT_SIZES = {
+  arabicSize: 30,      // Article Detail main text
+  translationSize: 18, // Article Detail translation
+  headerSize: 24,      // Article Detail header
+  listTitleSize: 20    // List Item title
+};

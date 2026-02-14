@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
-import { MinusIcon, PlusIcon } from 'react-native-heroicons/outline';
+import { MinusIcon, PlusIcon, MoonIcon, SunIcon, CloudArrowDownIcon, ChevronRightIcon } from 'react-native-heroicons/outline';
 import { useTheme } from '../context/ThemeContext';
 import { useFont } from '../context/FontContext';
+import { useNavigation } from '@react-navigation/native';
 
 const Settings = () => {
-  const { isDarkMode } = useTheme();
+  const { isDarkMode, toggleTheme } = useTheme();
   const { arabicSize, translationSize, headerSize, listTitleSize, setFontSize } = useFont();
+  const navigation = useNavigation();
 
   const fontSettings = [
     {
@@ -62,7 +64,35 @@ const Settings = () => {
   return (
     <SafeAreaView className="flex-1 mt-10 bg-slate-50 dark:bg-slate-950">
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 16 }}>
-      
+        
+        {/* Dark Mode Toggle */}
+        <View className="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 mb-4">
+          <View className="flex-row items-center justify-between">
+            <View className="flex-row items-center flex-1">
+              <View className="w-10 h-10 bg-amber-50 dark:bg-amber-900/20 rounded-xl items-center justify-center mr-4">
+                {isDarkMode ? (
+                  <MoonIcon size={20} color="#fbbf24" />
+                ) : (
+                  <SunIcon size={20} color="#f59e0b" />
+                )}
+              </View>
+              <View className="flex-1">
+                <Text className="text-lg font-bold text-slate-900 dark:text-white">
+                  {isDarkMode ? 'Dark Mode' : 'Light Mode'}
+                </Text>
+                
+              </View>
+            </View>
+            <TouchableOpacity
+              onPress={toggleTheme}
+              activeOpacity={0.8}
+              className={`w-14 h-8 rounded-full px-1 justify-center ${isDarkMode ? 'bg-indigo-600 items-end' : 'bg-slate-300 items-start'}`}
+            >
+              <View className="w-6 h-6 bg-white rounded-full shadow-sm" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* Font Size Controls */}
         {fontSettings.map((setting, index) => (
           <View 

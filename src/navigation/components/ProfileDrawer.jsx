@@ -71,27 +71,6 @@ const ProfileDrawer = (props) => {
             </TouchableOpacity>
           )}
 
-          {/* Theme Toggle (Always Shown) */}
-          <View className="flex-row items-center px-5 py-2">
-            <View className="w-10 h-10 bg-amber-50 dark:bg-amber-900/20 rounded-xl items-center justify-center mr-4">
-              {isDarkMode ? (
-                <MoonIcon size={20} color="#fbbf24" />
-              ) : (
-                <SunIcon size={20} color="#f59e0b" />
-              )}
-            </View>
-            <Text className="flex-1 text-slate-700 dark:text-slate-200 font-bold text-base">
-              {isDarkMode ? 'Dark Mode' : 'Light Mode'}
-            </Text>
-            <TouchableOpacity 
-              onPress={toggleTheme}
-              activeOpacity={0.8}
-              className={`w-12 h-6 rounded-full px-1 justify-center ${isDarkMode ? 'bg-indigo-600 items-end' : 'bg-slate-200 items-start'}`}
-            >
-              <View className="w-4 h-4 bg-white rounded-full shadow-sm" />
-            </TouchableOpacity>
-          </View>
-
           {/* Additional Menu Items */}
           {[
             { label: 'Rate Us', icon: StarIcon, action: () => showAlert('Rate Us', 'Coming Soon!', 'info') },

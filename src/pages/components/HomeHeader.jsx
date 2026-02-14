@@ -24,7 +24,7 @@ const HomeHeader = ({ onOpenDrawer, userAvatar }) => {
        
       </View>
         <TouchableOpacity onPress={onOpenDrawer}>
-        <Bars3BottomLeftIcon size={30} color={isDarkMode ? "white" : "#0f172a"} />
+        <Bars3BottomLeftIcon size={30} color={isDarkMode ? "white" : "#0f172a"} /> 
       </TouchableOpacity>
     </View>
   );

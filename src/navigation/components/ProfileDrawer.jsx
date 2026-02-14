@@ -13,7 +13,7 @@ import {
 } from '@react-navigation/drawer';
 import { AuthContext } from '../../context/AuthContext';
 import { useAlert } from '../../context/AlertContext';
-import { SunIcon, MoonIcon, UserIcon, ArrowLeftOnRectangleIcon, ChevronRightIcon, CloudArrowDownIcon } from 'react-native-heroicons/outline';
+import { SunIcon, MoonIcon, UserIcon, ArrowLeftOnRectangleIcon, CloudArrowDownIcon, StarIcon, BookOpenIcon, QuestionMarkCircleIcon, Cog6ToothIcon } from 'react-native-heroicons/outline';
 import { useTheme } from '../../context/ThemeContext';
 
 import LoggedInContent from './components/LoggedInContent';
@@ -62,18 +62,17 @@ const ProfileDrawer = (props) => {
             <TouchableOpacity 
               onPress={handleEditProfile}
               activeOpacity={0.5}
-              className="flex-row items-center px-4 py-4 rounded-2xl"
+              className="flex-row items-center px-4 py-2 rounded-2xl"
             >
               <View className="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl items-center justify-center mr-4">
                 <UserIcon size={20} color={isDarkMode ? "#a5b4fc" : "#6366f1"} />
               </View>
               <Text className="flex-1 text-slate-700 dark:text-slate-200 font-bold text-base">My Profile</Text>
-              <ChevronRightIcon size={16} color="#94a3b8" />
             </TouchableOpacity>
           )}
 
           {/* Theme Toggle (Always Shown) */}
-          <View className="flex-row items-center px-5 py-4">
+          <View className="flex-row items-center px-5 py-2">
             <View className="w-10 h-10 bg-amber-50 dark:bg-amber-900/20 rounded-xl items-center justify-center mr-4">
               {isDarkMode ? (
                 <MoonIcon size={20} color="#fbbf24" />
@@ -93,17 +92,31 @@ const ProfileDrawer = (props) => {
             </TouchableOpacity>
           </View>
 
+          {/* Additional Menu Items */}
+          {[
+            { label: 'Rate Us', icon: StarIcon, action: () => showAlert('Rate Us', 'Coming Soon!', 'info') },
+            { label: 'Contact Us', icon: BookOpenIcon, action: () => showAlert('Contact Us', 'Coming Soon!', 'info') },
+            { label: 'About Us', icon: QuestionMarkCircleIcon, action: () => showAlert('About Us', 'Coming Soon!', 'info') },
+            { label: 'Settings', icon: Cog6ToothIcon, action: () => props.navigation.navigate('Settings') }
+          ].map((item, index) => (
+            <TouchableOpacity key={index} onPress={item.action} activeOpacity={0.5} className="flex-row items-center px-4 py-2 rounded-2xl">
+              <View className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-xl items-center justify-center mr-4">
+                <item.icon size={20} color={isDarkMode ? "#94a3b8" : "#64748b"} />
+              </View>
+              <Text className="flex-1 text-slate-600 dark:text-slate-300 font-bold text-base">{item.label}</Text>
+            </TouchableOpacity>
+          ))}
+
           {/* Sync Test (Dev Utility) */}
           <TouchableOpacity 
             onPress={() => props.navigation.navigate('TestSync')}
             activeOpacity={0.5}
-            className="flex-row items-center px-4 py-4 rounded-2xl"
+            className="flex-row items-center px-4 py-2 rounded-2xl"
           >
             <View className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-xl items-center justify-center mr-4">
               <CloudArrowDownIcon size={20} color="#94a3b8" />
             </View>
             <Text className="flex-1 text-slate-500 dark:text-slate-400 font-bold text-base">Developer Sync</Text>
-            <ChevronRightIcon size={16} color="#94a3b8" />
           </TouchableOpacity>
         </View>
       </DrawerContentScrollView>

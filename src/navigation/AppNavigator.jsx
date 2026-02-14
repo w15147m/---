@@ -12,6 +12,7 @@ import AuthNavigator from './components/AuthNavigator';
 import SplashScreen from '../pages/SplashScreen';
 import ArticleDetail from '../pages/ArticleDetail';
 import TestSync from '../pages/TestSync';
+import Settings from '../pages/Settings';
 
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
@@ -47,6 +48,7 @@ const AppNavigator = () => {
         {/* Detail Screens (Global Stack) */}
         <Stack.Screen name="ArticleDetail" component={ArticleDetail} />
         <Stack.Screen name="TestSync" component={TestSync} />
+        <Stack.Screen name="Settings" component={Settings} />
         
         {/* Auth is only available if not logged in */}
         {!user && (

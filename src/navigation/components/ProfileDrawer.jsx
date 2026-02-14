@@ -13,7 +13,7 @@ import {
 } from '@react-navigation/drawer';
 import { AuthContext } from '../../context/AuthContext';
 import { useAlert } from '../../context/AlertContext';
-import { SunIcon, MoonIcon, UserIcon, ArrowLeftOnRectangleIcon, ChevronRightIcon } from 'react-native-heroicons/outline';
+import { SunIcon, MoonIcon, UserIcon, ArrowLeftOnRectangleIcon, ChevronRightIcon, CloudArrowDownIcon } from 'react-native-heroicons/outline';
 import { useTheme } from '../../context/ThemeContext';
 
 import LoggedInContent from './components/LoggedInContent';
@@ -92,6 +92,19 @@ const ProfileDrawer = (props) => {
               <View className="w-4 h-4 bg-white rounded-full shadow-sm" />
             </TouchableOpacity>
           </View>
+
+          {/* Sync Test (Dev Utility) */}
+          <TouchableOpacity 
+            onPress={() => props.navigation.navigate('TestSync')}
+            activeOpacity={0.5}
+            className="flex-row items-center px-4 py-4 rounded-2xl"
+          >
+            <View className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-xl items-center justify-center mr-4">
+              <CloudArrowDownIcon size={20} color="#94a3b8" />
+            </View>
+            <Text className="flex-1 text-slate-500 dark:text-slate-400 font-bold text-base">Developer Sync</Text>
+            <ChevronRightIcon size={16} color="#94a3b8" />
+          </TouchableOpacity>
         </View>
       </DrawerContentScrollView>
 

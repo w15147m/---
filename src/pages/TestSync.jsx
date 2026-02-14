@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
@@ -8,14 +8,26 @@ import {
   ActivityIndicator,
   Alert
 } from 'react-native';
-import { ChevronLeftIcon, CloudArrowDownIcon } from 'react-native-heroicons/outline';
+import { ChevronLeftIcon, CloudArrowDownIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from 'react-native-heroicons/outline';
+import RNFS from 'react-native-fs';
 import { useTheme } from '../context/ThemeContext';
 
 const TestSync = ({ navigation }) => {
   const { isDarkMode } = useTheme();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
+  const [localFileExists, setLocalFileExists] = useState(false);
   const REPO_URL = 'https://raw.githubusercontent.com/aminpaydar/Mafatih/master/mafatih-server/chapters.json';
+  const LOCAL_FILE_PATH = `${RNFS.DocumentDirectoryPath}/taqeebat_local.json`;
+
+  useEffect(() => {
+    checkLocalFile();
+  }, []);
+
+  const checkLocalFile = async () => {
+    const exists = await RNFS.exists(LOCAL_FILE_PATH);
+    setLocalFileExists(exists);
+  };
 
   const fetchTaqeebat = async () => {
     setLoading(true);
@@ -23,16 +35,8 @@ const TestSync = ({ navigation }) => {
       const response = await fetch(REPO_URL);
       const json = await response.json();
       
-      // Filter for Taqeebat chapters
-      // The JSON structure: array of chapters -> sections -> articles -> items
-      const taqeebatChapters = json.filter(chapter => 
-        chapter.title.includes('تعقیبات') || 
-        (chapter.sections && chapter.sections.some(s => s.articles && s.articles.some(a => a.title && a.title.includes('تعقیبات'))))
-      );
-
-      // Extract only articles that are Taqeebat
       const articles = [];
-      taqeebatChapters.forEach(chapter => {
+      json.forEach(chapter => {
         if (chapter.sections) {
           chapter.sections.forEach(section => {
             if (section.articles) {
@@ -46,16 +50,57 @@ const TestSync = ({ navigation }) => {
         }
       });
 
-      setData({
+      const result = {
         totalChapters: json.length,
         taqeebatCount: articles.length,
-        articles: articles.slice(0, 10) // Preview first 10
-      });
+        articles: articles // Keep all for saving
+      };
 
+      setData(result);
       Alert.alert('Success', `Found ${articles.length} Taqeebat articles!`);
     } catch (error) {
       console.error('Fetch Error:', error);
       Alert.alert('Error', 'Failed to fetch data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveToLocalJson = async () => {
+    if (!data) {
+      Alert.alert('Wait', 'Please fetch data first!');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await RNFS.writeFile(LOCAL_FILE_PATH, JSON.stringify(data, null, 2), 'utf8');
+      setLocalFileExists(true);
+      Alert.alert('Success', 'Data saved to local JSON file!');
+    } catch (error) {
+      console.error('Save Error:', error);
+      Alert.alert('Error', 'Failed to save to local file');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadFromLocalJson = async () => {
+    setLoading(true);
+    try {
+      const exists = await RNFS.exists(LOCAL_FILE_PATH);
+      if (!exists) {
+        Alert.alert('Error', 'Local file does not exist yet');
+        return;
+      }
+
+      const content = await RNFS.readFile(LOCAL_FILE_PATH, 'utf8');
+      const json = JSON.parse(content);
+      setData(json);
+      Alert.alert('Success', `Loaded ${json.taqeebatCount} articles from local file!`);
+    } catch (error) {
+      console.error('Load Error:', error);
+      Alert.alert('Error', 'Failed to read local file');
     } finally {
       setLoading(false);
     }
@@ -75,7 +120,7 @@ const TestSync = ({ navigation }) => {
 
       <ScrollView className="flex-1 p-6">
         <View className="bg-indigo-50 dark:bg-indigo-900/10 p-6 rounded-[32px] mb-6">
-          <Text className="text-slate-900 dark:text-white text-lg font-bold mb-2">Source URL</Text>
+          <Text className="text-slate-900 dark:text-white text-lg font-bold mb-2">Remote Source</Text>
           <Text className="text-slate-500 dark:text-slate-400 text-xs mb-6 italic" numberOfLines={1}>
             {REPO_URL}
           </Text>
@@ -83,37 +128,48 @@ const TestSync = ({ navigation }) => {
           <TouchableOpacity 
             onPress={fetchTaqeebat}
             disabled={loading}
-            className="bg-indigo-600 p-4 rounded-2xl flex-row items-center justify-center"
+            className="bg-indigo-600 p-4 rounded-2xl flex-row items-center justify-center mb-4"
           >
-            {loading ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <>
-                <CloudArrowDownIcon size={20} color="white" className="mr-2" />
-                <Text className="text-white font-bold ml-2">Fetch & Filter Taqeebat</Text>
-              </>
+            {loading ? <ActivityIndicator color="white" /> : (
+              <><CloudArrowDownIcon size={20} color="white" /><Text className="text-white font-bold ml-2">Fetch Taqeebat</Text></>
             )}
           </TouchableOpacity>
+
+          <View className="flex-row space-x-2">
+            <TouchableOpacity 
+              onPress={saveToLocalJson}
+              disabled={!data || loading}
+              className={`flex-1 p-4 rounded-2xl flex-row items-center justify-center ${!data ? 'bg-slate-200 dark:bg-slate-800' : 'bg-emerald-600'}`}
+            >
+              <DocumentArrowDownIcon size={20} color="white" />
+              <Text className="text-white font-bold ml-2">Save JSON</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              onPress={loadFromLocalJson}
+              disabled={loading || !localFileExists}
+              className={`flex-1 p-4 rounded-2xl flex-row items-center justify-center ${!localFileExists ? 'bg-slate-200 dark:bg-slate-800' : 'bg-amber-600'}`}
+            >
+              <DocumentArrowUpIcon size={20} color="white" />
+              <Text className="text-white font-bold ml-2">Load JSON</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {data && (
           <View className="space-y-4">
             <View className="flex-row justify-between bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl">
-              <Text className="text-slate-500">Total Chapters in JSON</Text>
-              <Text className="text-slate-900 dark:text-white font-bold">{data.totalChapters}</Text>
-            </View>
-            <View className="flex-row justify-between bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-2xl">
-              <Text className="text-emerald-700 dark:text-emerald-400">Taqeebat Found</Text>
-              <Text className="text-emerald-700 dark:text-emerald-400 font-bold">{data.taqeebatCount}</Text>
+              <Text className="text-slate-500">Taqeebat Found</Text>
+              <Text className="text-slate-900 dark:text-white font-bold">{data.taqeebatCount}</Text>
             </View>
 
             <Text className="text-slate-900 dark:text-white text-lg font-bold mt-4 mb-2">Preview (Articles)</Text>
-            {data.articles.map((art, idx) => (
+            {data.articles.slice(0, 10).map((art, idx) => (
               <View key={idx} className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 mb-2">
                 <Text className="text-sky-500 text-right text-lg font-islamic mb-1">
                   {art.title.replace(/\n/g, '').trim()}
                 </Text>
-                <Text className="text-slate-400 text-xs">Items count: {art.items?.length || 0}</Text>
+                <Text className="text-slate-400 text-xs">Items: {art.items?.length || 0}</Text>
               </View>
             ))}
           </View>

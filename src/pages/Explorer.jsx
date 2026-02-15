@@ -95,8 +95,17 @@ const Explorer = ({ navigation, route }) => {
       <SafeAreaView className="flex-1">
         <View className="flex-1 px-6">
           
-          {/* Modular Header */}
-          <HomeHeader onOpenDrawer={() => navigation.openDrawer()} />
+          {/* Modular Header with dynamic title (Urdu Only) */}
+          <HomeHeader 
+            title={
+              (() => {
+                const fullTitle = topLevelChapters.find(c => c.id === activeTabId)?.name || 'Library';
+                // Split by '(' to remove English translation if present
+                return fullTitle.split('(')[0].trim();
+              })()
+            }
+            onOpenDrawer={() => navigation.openDrawer()} 
+          />
 
           {topLevelChapters.length > 0 ? (
             <View className="flex-1">

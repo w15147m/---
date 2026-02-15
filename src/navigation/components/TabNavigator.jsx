@@ -71,7 +71,8 @@ const TabNavigator = () => {
         options={{ 
           title: 'Settings',
           tabBarIcon: (props) => <Cog6ToothIcon {...props} />,
-          tabBarIconActive: (props) => <Cog6ToothIconSolid {...props} />
+          tabBarIconActive: (props) => <Cog6ToothIconSolid {...props} />,
+          tabBarItemStyle: { display: 'none' }
         }} 
       />
 

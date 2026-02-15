@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { db } from '../../db/client';
-import { articles } from '../../db/schema';
+import { db } from '../../../db/client';
+import { articles } from '../../../db/schema';
 import { eq } from 'drizzle-orm';
 import { useNavigation } from '@react-navigation/native';
 import ArticleListItem from './ArticleListItem';

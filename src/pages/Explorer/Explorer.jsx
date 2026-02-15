@@ -11,11 +11,11 @@ import {
   Dimensions,
   StatusBar
 } from 'react-native';
-import { db } from '../db/client';
-import { chapters } from '../db/schema';
+import { db } from '../../db/client';
+import { chapters } from '../../db/schema';
 import { isNull, eq } from 'drizzle-orm';
-import { useTheme } from '../context/ThemeContext';
-import HomeHeader from '../common/components/HomeHeader';
+import { useTheme } from '../../context/ThemeContext';
+import HomeHeader from '../../common/components/HomeHeader';
 import MainTabSelector from './components/MainTabSelector';
 import SubTabSelector from './components/SubTabSelector';
 import ChapterContent from './components/ChapterContent';

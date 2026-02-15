@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import ListItemMarker from './ListItemMarker';
 
-import { useFont } from '../../context/FontContext';
+import { useFont } from '../../../context/FontContext';
 
 const ArticleListItem = ({ article, index, onPress }) => {
   const { listTitleSize } = useFont();

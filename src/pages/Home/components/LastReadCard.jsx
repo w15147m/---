@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { BookmarkIcon } from 'react-native-heroicons/solid';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../../../context/ThemeContext';
 
 const LastReadCard = ({ title, subtitle, icon, onPressBookmark }) => {
   const { isDarkMode } = useTheme();

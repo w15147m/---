@@ -20,7 +20,7 @@ import {
 
 // Custom Components & Pages
 import CustomTabBar from './CustomTabBar';
-import Home from '../../pages/Home';
+import Home from '../../pages/Home/Home';
 import Profile from '../../pages/Profile/Profile';
 import Explorer from '../../pages/Explorer';
 import ArticleDetail from '../../pages/ArticleDetail';

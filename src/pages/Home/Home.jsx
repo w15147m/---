@@ -14,10 +14,10 @@ import {
   Bars3BottomLeftIcon,
 } from 'react-native-heroicons/solid';
 
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../../context/ThemeContext';
 import CategoryCard from './components/CategoryCard';
 import LastReadCard from './components/LastReadCard';
-import HomeHeader from './components/HomeHeader';
+import HomeHeader from '../../common/components/HomeHeader';
 
 const { width } = Dimensions.get('window');
 
@@ -26,10 +26,10 @@ const Home = () => {
   const { isDarkMode } = useTheme();
 
   const categories = [
-    { id: '1', title_ur: 'سورۃ', title_en: 'Surah', icon: require('../assets/ui-assets/quranSura.png') },
-    { id: '2', title_ur: 'پارہ', title_en: 'Para', icon: require('../assets/ui-assets/quranSura.png') },
-    { id: '3', title_ur: 'سورۃ یس', title_en: 'Surah Yasin', icon: require('../assets/ui-assets/quranSura.png') },
-    { id: '4', title_ur: 'آیت الکرسی', title_en: 'Ait Al-kursi', icon: require('../assets/ui-assets/quranSura.png') },
+    { id: '1', title_ur: 'سورۃ', title_en: 'Surah', icon: require('../../assets/ui-assets/quranSura.png') },
+    { id: '2', title_ur: 'پارہ', title_en: 'Para', icon: require('../../assets/ui-assets/quranSura.png') },
+    { id: '3', title_ur: 'سورۃ یس', title_en: 'Surah Yasin', icon: require('../../assets/ui-assets/quranSura.png') },
+    { id: '4', title_ur: 'آیت الکرسی', title_en: 'Ait Al-kursi', icon: require('../../assets/ui-assets/quranSura.png') },
   ];
 
   return (
@@ -51,7 +51,7 @@ const Home = () => {
               <LastReadCard 
                 title="Al-Fatihah"
                 subtitle="Ayah No: 1"
-                icon={require('../assets/ui-assets/quranSura.png')}
+                icon={require('../../assets/ui-assets/quranSura.png')}
                 onPressBookmark={() => console.log('Bookmark pressed')}
               />
               </View>

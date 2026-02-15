@@ -4,7 +4,7 @@ import { MinusIcon, PlusIcon, MoonIcon, SunIcon, ComputerDesktopIcon, ChevronRig
 import { useTheme } from '../context/ThemeContext';
 import { useFont } from '../context/FontContext';
 import { useNavigation } from '@react-navigation/native';
-import HomeHeader from './components/HomeHeader';
+import HomeHeader from '../common/components/HomeHeader';
 
 const Settings = () => {
   const { themeMode, setThemeMode, isDarkMode } = useTheme();

@@ -25,15 +25,15 @@ const TASBIH_STEPS = [
 ];
 
 const COMMON_ZIKRS = [
-  { id: '1', name: 'Subhan Allah', arabic: 'سُبْحَانَ اللَّه' },
-  { id: '2', name: 'Al-hamdulillah', arabic: 'الْحَمْدُ لِلَّه' },
-  { id: '3', name: 'Allahu Akbar', arabic: 'اللهُ أَكْبَر' },
-  { id: '4', name: 'La ilaha illallah', arabic: 'لَا إِلٰهَ إِلَّا اللّٰه' },
-  { id: '5', name: 'Salawat', arabic: 'اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَآلِ مُحَمَّدٍ' },
-  { id: '6', name: 'Astaghfirullah', arabic: 'أَسْتَغْفِرُ اللّٰه' },
-  { id: '7', name: 'Ya Allah', arabic: 'يَا اللّٰه' },
-  { id: '8', name: 'Ya Ali', arabic: 'يَا عَلِي' },
-  { id: '9', name: 'Ya Hussain', arabic: 'يَا حُسَيْن' },
+  { value: '1', label: 'Subhan Allah', arabic: 'سُبْحَانَ اللَّه' },
+  { value: '2', label: 'Al-hamdulillah', arabic: 'الْحَمْدُ لِلَّه' },
+  { value: '3', label: 'Allahu Akbar', arabic: 'اللهُ أَكْبَر' },
+  { value: '4', label: 'La ilaha illallah', arabic: 'لَا إِلٰهَ إِلَّا اللّٰه' },
+  { value: '5', label: 'Salawat', arabic: 'اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَآلِ مُحَمَّدٍ' },
+  { value: '6', label: 'Astaghfirullah', arabic: 'أَسْتَغْفِرُ اللّٰه' },
+  { value: '7', label: 'Ya Allah', arabic: 'يَا اللّٰه' },
+  { value: '8', label: 'Ya Ali', arabic: 'يَا عَلِي' },
+  { value: '9', label: 'Ya Hussain', arabic: 'يَا حُسَيْن' },
 ];
 
 const Tasbih = () => {
@@ -55,10 +55,10 @@ const Tasbih = () => {
   const [tempZikrId, setTempZikrId] = useState(['1']);
   const [tempGoal, setTempGoal] = useState('100');
 
-  const selectedZikr = COMMON_ZIKRS.find(z => z.id === tempZikrId[0]) || COMMON_ZIKRS[0];
+  const selectedZikr = COMMON_ZIKRS.find(z => z.value === tempZikrId[0]) || COMMON_ZIKRS[0];
 
   const currentStep = isCustomMode 
-    ? { title: customZikr.name, arabic: customZikr.arabic, target: parseInt(customGoal) || 100 }
+    ? { title: customZikr.label, arabic: customZikr.arabic, target: parseInt(customGoal) || 100 }
     : TASBIH_STEPS[currentStepIndex];
 
   const handlePress = useCallback(() => {
@@ -240,22 +240,60 @@ const Tasbih = () => {
                 <View className="mb-8">
                   <Select2
                     isSelectSingle
-                    style={{ 
-                      borderRadius: 16, 
-                      backgroundColor: isDarkMode ? '#1e293b' : '#f8fafc',
-                      borderColor: isDarkMode ? '#334155' : '#f1f5f9',
-                      paddingHorizontal: 12,
-                      height: 50,
-                      justifyContent: 'center'
+                    styles={{
+                      container: {
+                        borderRadius: 16,
+                        backgroundColor: isDarkMode ? '#1e293b' : '#f8fafc',
+                        borderColor: isDarkMode ? '#334155' : '#e2e8f0',
+                        borderWidth: 2,
+                      },
+                      topBar: {
+                        container: {
+                          borderBottomWidth: 0,
+                          paddingVertical: 12,
+                        },
+                        text: {
+                          color: isDarkMode ? '#f8fafc' : '#0f172a',
+                          fontWeight: 'bold',
+                        },
+                        placeholder: {
+                          color: isDarkMode ? '#64748b' : '#94a3b8',
+                        },
+                      },
+                      searchBar: {
+                        container: {
+                          backgroundColor: isDarkMode ? '#0f172a' : '#ffffff',
+                          borderBottomColor: isDarkMode ? '#334155' : '#e2e8f0',
+                        },
+                        input: {
+                          color: isDarkMode ? '#f8fafc' : '#0f172a',
+                        },
+                      },
+                      listItem: {
+                        container: {
+                          backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+                          borderBottomColor: isDarkMode ? '#334155' : '#f1f5f9',
+                        },
+                        text: {
+                          color: isDarkMode ? '#cbd5e1' : '#334155',
+                          fontWeight: '500',
+                        },
+                        selectedContainer: {
+                          backgroundColor: isDarkMode ? '#312e81' : '#e0e7ff',
+                        },
+                        selectedText: {
+                          color: isDarkMode ? '#818cf8' : '#4338ca',
+                          fontWeight: 'bold',
+                        },
+                      }
                     }}
-                    colorTheme={isDarkMode ? '#6366f1' : '#4f46e5'}
                     popupTitle="Choose your Zikr"
                     title="Select Zikr"
-                    data={COMMON_ZIKRS}
+                    data={{ type: 'list', data: COMMON_ZIKRS }}
                     onSelect={data => setTempZikrId(data)}
                     onRemoveItem={data => setTempZikrId(data)}
                     value={tempZikrId}
-                    searchPlaceHolderText="Search zikrs..."
+                    searchPlaceHolderText="Filter Zikrs..."
                   />
                 </View>
 

@@ -12,7 +12,7 @@ import AuthNavigator from './components/AuthNavigator';
 import SplashScreen from '../pages/SplashScreen';
 import ArticleDetail from '../pages/ArticleDetail';
 import TestSync from '../pages/TestSync';
-import Settings from '../pages/Settings';
+import Settings from '../pages/Settings/Settings';
 
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';

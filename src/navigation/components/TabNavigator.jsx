@@ -1,19 +1,21 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { 
   HomeIcon, 
   UserIcon,
   BookOpenIcon,
   SparklesIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  SwatchIcon
 } from 'react-native-heroicons/outline';
 import { 
   HomeIcon as HomeIconSolid,
   UserIcon as UserIconSolid,
   BookOpenIcon as BookOpenIconSolid,
   SparklesIcon as SparklesIconSolid,
-  Cog6ToothIcon as Cog6ToothIconSolid
+  Cog6ToothIcon as Cog6ToothIconSolid,
+  SwatchIcon as SwatchIconSolid
 } from 'react-native-heroicons/solid';
 
 // Custom Components & Pages
@@ -23,6 +25,7 @@ import Profile from '../../pages/Profile/Profile';
 import Explorer from '../../pages/Explorer';
 import ArticleDetail from '../../pages/ArticleDetail';
 import Settings from '../../pages/Settings';
+import Tasbih from '../../pages/Tasbih';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,6 +55,28 @@ const TabNavigator = () => {
           title: 'Taqeebat',
           tabBarIcon: (props) => <SparklesIcon {...props} />,
           tabBarIconActive: (props) => <SparklesIconSolid {...props} />
+        }} 
+      />
+
+      <Tab.Screen 
+        name="TasbihTab" 
+        component={Tasbih} 
+        options={{ 
+          title: 'Tasbih',
+          tabBarIcon: (props) => (
+            <Image 
+              source={require('../../assets/ui-assets/Recite.png')} 
+              style={{ width: props.size, height: props.size, tintColor: props.color }} 
+              resizeMode="contain"
+            />
+          ),
+          tabBarIconActive: (props) => (
+            <Image 
+              source={require('../../assets/ui-assets/Recite.png')} 
+              style={{ width: props.size, height: props.size, tintColor: props.color }} 
+              resizeMode="contain"
+            />
+          )
         }} 
       />
 

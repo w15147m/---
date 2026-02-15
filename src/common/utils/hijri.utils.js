@@ -49,9 +49,8 @@ const HijriUtils = {
     }
     
     // For 15 Feb 2026, JD is 2461087.
-    // Result should be 27/28 Shaban 1447.
-    // Adjusting offset for regional alignment (27 Shaban)
-    hDay += 0; 
+    // Result is 26 Shaban. Common visibility adjustment -> +1 (27 Shaban).
+    hDay += 1; 
     if (hDay > 30) {
        hDay = 1;
        hMonth++;

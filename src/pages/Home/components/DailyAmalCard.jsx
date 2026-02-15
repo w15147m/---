@@ -32,7 +32,7 @@ const DailyAmalCard = ({ onPress, locationName, coordinates }) => {
             {hijriDate.day} {hijriDate.monthName || 'Month'}
           </Text>
           <Text className="text-white/70 text-base">
-            {locationName || 'Current Location'}
+            {coordinates?.cityName || locationName || 'Current Location'}
           </Text>
         </View>
         <View className="bg-white/20 p-3 rounded-2xl">

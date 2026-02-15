@@ -20,13 +20,36 @@ import DailyAmalCard from './components/DailyAmalCard';
 import HomeHeader from '../../common/components/HomeHeader';
 import LastReadCard from './components/LastReadCard';
 import useLocation from '../../common/hooks/useLocation';
+import LocationModal from '../../common/components/LocationModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
 const Home = () => {
   const navigation = useNavigation();
   const { isDarkMode } = useTheme();
-  const { location, loading: locLoading } = useLocation();
+  const { location, saveLocation } = useLocation();
+  const [showLocationModal, setShowLocationModal] = React.useState(false);
+
+  // Auto-show modal if no location is saved
+  React.useEffect(() => {
+    const checkLocation = async () => {
+      const saved = await AsyncStorage.getItem('@user_location');
+      if (!saved) {
+        setShowLocationModal(true);
+      }
+    };
+    checkLocation();
+  }, []);
+
+  const handleSelectCity = (city) => {
+    saveLocation({
+      latitude: city.lat,
+      longitude: city.lon,
+      cityName: city.name
+    });
+    setShowLocationModal(false);
+  };
 
   const categories = [
     { id: '1', title_ur: 'سورۃ', title_en: 'Surah', icon: require('../../assets/ui-assets/quranSura.png') },
@@ -53,8 +76,8 @@ const Home = () => {
             <View className="mt-4">
               <DailyAmalCard 
                 coordinates={location}
-                locationName={locLoading ? 'Detecting...' : 'My Location'}
-                onPress={() => navigation.navigate('Explorer')}
+                locationName={location?.cityName || 'Select Location'}
+                onPress={() => setShowLocationModal(true)}
               />
             </View>
 
@@ -82,6 +105,13 @@ const Home = () => {
             </ScrollView>
           </View>
         </SafeAreaView>
+
+        {/* Location Selector Modal */}
+        <LocationModal 
+          isVisible={showLocationModal}
+          onClose={() => setShowLocationModal(false)}
+          onSelectCity={handleSelectCity}
+        />
     </View>
   );
 };

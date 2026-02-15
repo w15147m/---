@@ -44,8 +44,8 @@ const TasbihCounter = ({
           }}
         />
 
-        <View className="items-center justify-center pb-12">
-          <Text className="text-9xl font-black text-slate-900 dark:text-white leading-none">
+        <View className="items-center justify-center pb-16">
+          <Text className="text-7xl font-black text-slate-900 dark:text-white leading-none">
             {count}
           </Text>
 

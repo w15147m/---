@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ArrowPathIcon, AdjustmentsHorizontalIcon } from 'react-native-heroicons/outline';
-import { useTheme } from '../context/ThemeContext';
-import { useFont } from '../context/FontContext';
-import HomeHeader from './components/HomeHeader';
+import { useTheme } from '../../context/ThemeContext';
+import { useFont } from '../../context/FontContext';
+import HomeHeader from '../components/HomeHeader';
 import TasbihCounter from './components/TasbihCounter';
 import CustomGoalModal from './components/CustomGoalModal';
 

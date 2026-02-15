@@ -25,7 +25,7 @@ import Profile from '../../pages/Profile/Profile';
 import Explorer from '../../pages/Explorer';
 import ArticleDetail from '../../pages/ArticleDetail';
 import Settings from '../../pages/Settings';
-import Tasbih from '../../pages/Tasbih';
+import Tasbih from '../../pages/Tasbih/Tasbih';
 
 const Tab = createBottomTabNavigator();
 

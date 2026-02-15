@@ -35,7 +35,7 @@ const TasbihCounter = ({
       {/* Center Area with Beads and Count */}
       <View className="w-full aspect-square items-center justify-center relative max-h-[350]">
         <Image 
-          source={require('../../assets/ui-assets/tasbeeh.png')}
+          source={require('../../../assets/ui-assets/tasbeeh.png')}
           className="absolute inset-0 w-full h-full"
           resizeMode="contain"
           style={{ 

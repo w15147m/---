@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Modal, TouchableOpacity, TextInput } from 'react-native';
 import { XMarkIcon, CheckIcon } from 'react-native-heroicons/outline';
-import SearchableDropdown from '../../common/components/SearchableDropdown';
+import SearchableDropdown from '../../../common/components/SearchableDropdown';
 
 const CustomGoalModal = ({
   isVisible,

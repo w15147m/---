@@ -43,6 +43,7 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-vector-icons": "^10.1.0",
     "react-redux": "^9.1.2",
+    "rn-select2": "^0.1.9",
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {

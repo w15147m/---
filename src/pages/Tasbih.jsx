@@ -9,11 +9,11 @@ import {
   Vibration,
   Platform,
   Modal,
-  TextInput,
-  ScrollView
+  TextInput
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ArrowPathIcon, AdjustmentsHorizontalIcon, XMarkIcon, CheckIcon } from 'react-native-heroicons/outline';
+import Select2 from 'rn-select2';
 import { useTheme } from '../context/ThemeContext';
 import { useFont } from '../context/FontContext';
 import HomeHeader from './components/HomeHeader';
@@ -25,15 +25,15 @@ const TASBIH_STEPS = [
 ];
 
 const COMMON_ZIKRS = [
-  { title: 'Subhan Allah', arabic: 'سُبْحَانَ اللَّه' },
-  { title: 'Al-hamdulillah', arabic: 'الْحَمْدُ لِلَّه' },
-  { title: 'Allahu Akbar', arabic: 'اللهُ أَكْبَر' },
-  { title: 'La ilaha illallah', arabic: 'لَا إِلٰهَ إِلَّا اللّٰه' },
-  { title: 'Salawat', arabic: 'اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَآلِ مُحَمَّدٍ' },
-  { title: 'Astaghfirullah', arabic: 'أَسْتَغْفِرُ اللّٰه' },
-  { title: 'Ya Allah', arabic: 'يَا اللّٰه' },
-  { title: 'Ya Ali', arabic: 'يَا عَلِي' },
-  { title: 'Ya Hussain', arabic: 'يَا حُسَيْن' },
+  { id: '1', name: 'Subhan Allah', arabic: 'سُبْحَانَ اللَّه' },
+  { id: '2', name: 'Al-hamdulillah', arabic: 'الْحَمْدُ لِلَّه' },
+  { id: '3', name: 'Allahu Akbar', arabic: 'اللهُ أَكْبَر' },
+  { id: '4', name: 'La ilaha illallah', arabic: 'لَا إِلٰهَ إِلَّا اللّٰه' },
+  { id: '5', name: 'Salawat', arabic: 'اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَآلِ مُحَمَّدٍ' },
+  { id: '6', name: 'Astaghfirullah', arabic: 'أَسْتَغْفِرُ اللّٰه' },
+  { id: '7', name: 'Ya Allah', arabic: 'يَا اللّٰه' },
+  { id: '8', name: 'Ya Ali', arabic: 'يَا عَلِي' },
+  { id: '9', name: 'Ya Hussain', arabic: 'يَا حُسَيْن' },
 ];
 
 const Tasbih = () => {
@@ -52,17 +52,13 @@ const Tasbih = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   
   // Temp states for modal
-  const [tempZikr, setTempZikr] = useState(COMMON_ZIKRS[0]);
+  const [tempZikrId, setTempZikrId] = useState(['1']);
   const [tempGoal, setTempGoal] = useState('100');
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredZikrs = COMMON_ZIKRS.filter(zikr => 
-    zikr.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    zikr.arabic.includes(searchQuery)
-  );
+  const selectedZikr = COMMON_ZIKRS.find(z => z.id === tempZikrId[0]) || COMMON_ZIKRS[0];
 
   const currentStep = isCustomMode 
-    ? { ...customZikr, target: parseInt(customGoal) || 100 }
+    ? { title: customZikr.name, arabic: customZikr.arabic, target: parseInt(customGoal) || 100 }
     : TASBIH_STEPS[currentStepIndex];
 
   const handlePress = useCallback(() => {
@@ -92,7 +88,7 @@ const Tasbih = () => {
   };
 
   const handleApplyCustom = () => {
-    setCustomZikr(tempZikr);
+    setCustomZikr(selectedZikr);
     setCustomGoal(tempGoal);
     setIsCustomMode(true);
     setCount(0);
@@ -132,7 +128,7 @@ const Tasbih = () => {
 
             <TouchableOpacity 
               onPress={() => {
-                setTempZikr(customZikr);
+                setTempZikrId([customZikr.id]);
                 setTempGoal(customGoal);
                 setIsModalVisible(true);
               }}
@@ -240,31 +236,28 @@ const Tasbih = () => {
                 />
 
                 <Text className="text-slate-500 dark:text-slate-400 font-bold mb-3 uppercase tracking-wider text-xs">Select Zikr</Text>
-                <ScrollView 
-                  className="max-h-60 mb-8"
-                  showsVerticalScrollIndicator={false}
-                >
-                  <View className="flex-row flex-wrap gap-2">
-                    {COMMON_ZIKRS.map((zikr) => {
-                      const isSelected = tempZikr.title === zikr.title;
-                      return (
-                        <TouchableOpacity
-                          key={zikr.title}
-                          onPress={() => setTempZikr(zikr)}
-                          className={`px-4 py-3 rounded-xl border-2 ${
-                            isSelected 
-                              ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20' 
-                              : 'border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50'
-                          }`}
-                        >
-                          <Text className={`font-bold ${isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-400'}`}>
-                            {zikr.title}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                </ScrollView>
+                
+                <View className="mb-8">
+                  <Select2
+                    isSelectSingle
+                    style={{ 
+                      borderRadius: 16, 
+                      backgroundColor: isDarkMode ? '#1e293b' : '#f8fafc',
+                      borderColor: isDarkMode ? '#334155' : '#f1f5f9',
+                      paddingHorizontal: 12,
+                      height: 50,
+                      justifyContent: 'center'
+                    }}
+                    colorTheme={isDarkMode ? '#6366f1' : '#4f46e5'}
+                    popupTitle="Choose your Zikr"
+                    title="Select Zikr"
+                    data={COMMON_ZIKRS}
+                    onSelect={data => setTempZikrId(data)}
+                    onRemoveItem={data => setTempZikrId(data)}
+                    value={tempZikrId}
+                    searchPlaceHolderText="Search zikrs..."
+                  />
+                </View>
 
                 <TouchableOpacity
                   onPress={handleApplyCustom}

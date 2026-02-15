@@ -74,8 +74,9 @@ const Settings = () => {
       <SafeAreaView className="flex-1">
         <View className="flex-1 px-6">
           
-          {/* Top Navigation - Reusing HomeHeader */}
+          {/* Top Navigation - Reusing HomeHeader with Title */}
           <HomeHeader 
+            title="Settings"
             onOpenDrawer={() => navigation.openDrawer()} 
             iconColor={isDarkMode ? "white" : "#0f172a"}
           />

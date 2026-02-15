@@ -1,9 +1,4 @@
-import {
-  Coordinates,
-  CalculationMethod,
-  PrayerTimes,
-  Madhab,
-} from 'adhan';
+import * as adhan from 'adhan';
 
 /**
  * Service to calculate prayer times (Iftar/Sahur) globally.
@@ -12,42 +7,39 @@ import {
 const PrayerAPI = {
   /**
    * Calculates Iftar (Maghrib) and Sahur (Fajr) times for a given date and location.
-   * @param {Date} date - The date to calculate for
-   * @param {number} latitude - Latitude of the location
-   * @param {number} longitude - Longitude of the location
-   * @returns {Object} { iftar: Date, sahur: Date }
    */
   getRamadanTimes: (date, latitude, longitude) => {
-    const coordinates = new Coordinates(latitude, longitude);
-    const params = CalculationMethod.Tehran();
-    params.madhab = Madhab.Shafi; // For Shia, Shafi/Maliki/Hanbali (Asr calculation) is used as it's earlier, or specific Shia settings.
+    try {
+      const coordinates = new adhan.Coordinates(latitude, longitude);
+      const params = adhan.CalculationMethod.Tehran();
+      params.madhab = adhan.Madhab.Shafi;
 
-    const prayerTimes = new PrayerTimes(coordinates, date, params);
+      const prayerTimes = new adhan.PrayerTimes(coordinates, date, params);
 
-    return {
-      iftar: prayerTimes.maghrib,
-      sahur: prayerTimes.fajr,
-      fajr: prayerTimes.fajr,
-      sunrise: prayerTimes.sunrise,
-      dhuhr: prayerTimes.dhuhr,
-      asr: prayerTimes.asr,
-      maghrib: prayerTimes.maghrib,
-      isha: prayerTimes.isha,
-    };
+      return {
+        iftar: prayerTimes.maghrib,
+        sahur: prayerTimes.fajr,
+        maghrib: prayerTimes.maghrib,
+        fajr: prayerTimes.fajr,
+      };
+    } catch (error) {
+      console.error('Error calculating prayer times:', error);
+      return null;
+    }
   },
 
   /**
-   * Formats a Date object into a readable time string (e.g., "05:30 AM").
-   * @param {Date} date - The date to format
-   * @returns {string} Formatted time string
+   * Manual time formatter for React Native compatibility.
    */
   formatTime: (date) => {
-    if (!date) return '--:--';
-    return date.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    });
+    if (!date || !(date instanceof Date)) return '--:--';
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}:${minutes} ${ampm}`;
   },
 };
 

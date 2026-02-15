@@ -27,22 +27,27 @@ export const usePrayerTimes = (coordinates, inputDate = new Date()) => {
           coordinates.longitude
         );
 
-        setTimes({
-          ...calculatedTimes,
-          iftarStr: PrayerAPI.formatTime(calculatedTimes.iftar),
-          sahurStr: PrayerAPI.formatTime(calculatedTimes.sahur),
-        });
+        if (calculatedTimes) {
+          setTimes({
+            ...calculatedTimes,
+            iftarStr: PrayerAPI.formatTime(calculatedTimes.iftar),
+            sahurStr: PrayerAPI.formatTime(calculatedTimes.sahur),
+          });
+        } else {
+          setTimes(null);
+          setError('Calculation returned no data');
+        }
         setError(null);
       } catch (err) {
         setError('Failed to calculate prayer times');
-        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchTimes();
-  }, [coordinates, inputDate]);
+    // Using string representation of coordinates and time to ensure stability
+  }, [coordinates?.latitude, coordinates?.longitude, inputDate.toDateString()]);
 
   return { times, loading, error };
 };

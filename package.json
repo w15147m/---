@@ -32,6 +32,7 @@
     "react-native": "0.74.3",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.19.0",
+    "react-native-get-location": "^6.0.1",
     "react-native-heroicons": "^4.0.0",
     "react-native-image-picker": "^8.2.1",
     "react-native-pager-view": "^6.4.1",

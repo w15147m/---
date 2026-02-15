@@ -19,12 +19,14 @@ import CategoryCard from './components/CategoryCard';
 import DailyAmalCard from './components/DailyAmalCard';
 import HomeHeader from '../../common/components/HomeHeader';
 import LastReadCard from './components/LastReadCard';
+import useLocation from '../../common/hooks/useLocation';
 
 const { width } = Dimensions.get('window');
 
 const Home = () => {
   const navigation = useNavigation();
   const { isDarkMode } = useTheme();
+  const { location, loading: locLoading } = useLocation();
 
   const categories = [
     { id: '1', title_ur: 'سورۃ', title_en: 'Surah', icon: require('../../assets/ui-assets/quranSura.png') },
@@ -50,7 +52,9 @@ const Home = () => {
             {/* Today's A'mal Section (Dynamic) */}
             <View className="mt-4">
               <DailyAmalCard 
-                onPress={() => console.log('Daily Amals Pressed')}
+                coordinates={location}
+                locationName={locLoading ? 'Detecting...' : 'My Location'}
+                onPress={() => navigation.navigate('Explorer')}
               />
             </View>
 

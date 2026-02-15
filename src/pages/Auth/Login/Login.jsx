@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-import { AuthContext } from '../../context/AuthContext';
-import { useAlert } from '../../context/AlertContext';
-import { login as loginService } from '../../services/authServices';
-import AuthLayout from '../../components/AuthLayout';
+import { AuthContext } from '../../../context/AuthContext';
+import { useAlert } from '../../../context/AlertContext';
+import { login as loginService } from '../../../services/authServices';
+import AuthLayout from '../../../components/AuthLayout';
 import { EyeIcon, EyeSlashIcon, EnvelopeIcon, LockClosedIcon } from 'react-native-heroicons/outline';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../../../context/ThemeContext';
 
 const Login = ({ navigation }) => {
   const { login } = useContext(AuthContext);

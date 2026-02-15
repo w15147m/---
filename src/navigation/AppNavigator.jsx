@@ -9,9 +9,9 @@ import MainDrawerNavigator from './components/MainDrawerNavigator';
 import AuthNavigator from './components/AuthNavigator';
 
 // Special Screens
-import SplashScreen from '../pages/SplashScreen';
+import SplashScreen from '../pages/SplashScreen/SplashScreen';
 import ArticleDetail from '../pages/ArticleDetail/ArticleDetail';
-import TestSync from '../pages/TestSync';
+import TestSync from '../pages/TestSync/TestSync';
 import Settings from '../pages/Settings/Settings';
 
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';

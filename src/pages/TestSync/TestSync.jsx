@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { ChevronLeftIcon, CloudArrowDownIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from 'react-native-heroicons/outline';
 import RNFS from 'react-native-fs';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../../context/ThemeContext';
 
 const TestSync = ({ navigation }) => {
   const { isDarkMode } = useTheme();

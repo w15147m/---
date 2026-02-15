@@ -10,7 +10,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import { APP_CONFIG } from '../common/utils/appConfig';
+import { APP_CONFIG } from '../../common/utils/appConfig';
 
 const { width, height } = Dimensions.get('window');
 
@@ -46,7 +46,7 @@ const SplashScreen = ({ onFinish }) => {
       
       {/* Background Image */}
       <Image 
-        source={require('../assets/ui-assets/Splash.png')}
+        source={require('../../assets/ui-assets/Splash.png')}
         style={StyleSheet.absoluteFillObject}
         resizeMode="cover"
       />

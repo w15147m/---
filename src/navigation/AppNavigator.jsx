@@ -10,7 +10,7 @@ import AuthNavigator from './components/AuthNavigator';
 
 // Special Screens
 import SplashScreen from '../pages/SplashScreen';
-import ArticleDetail from '../pages/ArticleDetail';
+import ArticleDetail from '../pages/ArticleDetail/ArticleDetail';
 import TestSync from '../pages/TestSync';
 import Settings from '../pages/Settings/Settings';
 

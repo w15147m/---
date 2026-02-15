@@ -31,11 +31,11 @@ const Home = () => {
   const { location, saveLocation, triggerGPS, loading: locLoading } = useLocation();
   const [showLocationModal, setShowLocationModal] = React.useState(false);
 
-  // Auto-show modal if no location is saved
+  // Auto-show modal if no location is saved or if it's a default fallback
   React.useEffect(() => {
     const checkLocation = async () => {
       const saved = await AsyncStorage.getItem('@user_location');
-      if (!saved) {
+      if (!saved || JSON.parse(saved).cityName?.includes('Default')) {
         setShowLocationModal(true);
       }
     };

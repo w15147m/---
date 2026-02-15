@@ -16,8 +16,9 @@ import {
 
 import { useTheme } from '../../context/ThemeContext';
 import CategoryCard from './components/CategoryCard';
-import LastReadCard from './components/LastReadCard';
+import DailyAmalCard from './components/DailyAmalCard';
 import HomeHeader from '../../common/components/HomeHeader';
+import LastReadCard from './components/LastReadCard';
 
 const { width } = Dimensions.get('window');
 
@@ -46,15 +47,20 @@ const Home = () => {
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
             
-            {/* Hero Image Section  Last Read Card - Now Reusable */}
-              <View className="my-4">
-              <LastReadCard 
-                title="Al-Fatihah"
-                subtitle="Ayah No: 1"
-                icon={require('../../assets/ui-assets/quranSura.png')}
-                onPressBookmark={() => console.log('Bookmark pressed')}
+            {/* Today's A'mal Section (Dynamic) */}
+            <View className="mt-4">
+              <DailyAmalCard 
+                onPress={() => console.log('Daily Amals Pressed')}
               />
-              </View>
+            </View>
+
+            {/* Last Read Card - Keep below or remove as per preference, but adding for value */}
+            <LastReadCard 
+              title="Al-Fatihah"
+              subtitle="Ayah No: 1"
+              icon={require('../../assets/ui-assets/quranSura.png')}
+              onPressBookmark={() => console.log('Bookmark pressed')}
+            />
 
           
 

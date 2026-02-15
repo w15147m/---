@@ -5,13 +5,15 @@ import {
   HomeIcon, 
   UserIcon,
   BookOpenIcon,
-  SparklesIcon
+  SparklesIcon,
+  Cog6ToothIcon
 } from 'react-native-heroicons/outline';
 import { 
   HomeIcon as HomeIconSolid,
   UserIcon as UserIconSolid,
   BookOpenIcon as BookOpenIconSolid,
-  SparklesIcon as SparklesIconSolid
+  SparklesIcon as SparklesIconSolid,
+  Cog6ToothIcon as Cog6ToothIconSolid
 } from 'react-native-heroicons/solid';
 
 // Custom Components & Pages
@@ -20,6 +22,7 @@ import Home from '../../pages/Home';
 import Profile from '../../pages/Profile/Profile';
 import Explorer from '../../pages/Explorer';
 import ArticleDetail from '../../pages/ArticleDetail';
+import Settings from '../../pages/Settings';
 
 const Tab = createBottomTabNavigator();
 
@@ -59,6 +62,16 @@ const TabNavigator = () => {
           title: 'Library',
           tabBarIcon: (props) => <BookOpenIcon {...props} />,
           tabBarIconActive: (props) => <BookOpenIconSolid {...props} />
+        }} 
+      />
+
+      <Tab.Screen 
+        name="SettingsTab" 
+        component={Settings} 
+        options={{ 
+          title: 'Settings',
+          tabBarIcon: (props) => <Cog6ToothIcon {...props} />,
+          tabBarIconActive: (props) => <Cog6ToothIconSolid {...props} />
         }} 
       />
 

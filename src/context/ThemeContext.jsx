@@ -1,40 +1,63 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Appearance } from 'react-native';
 import { useColorScheme } from 'nativewind';
 import { getItem, setItem } from '../utils/storage';
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const { colorScheme, setColorScheme, toggleColorScheme } = useColorScheme();
+  const { colorScheme, setColorScheme } = useColorScheme();
+  const [themeMode, setThemeMode] = useState('system');
 
   useEffect(() => {
     loadTheme();
   }, []);
 
+  useEffect(() => {
+    let subscription;
+    
+    if (themeMode === 'system') {
+      // Set initial system theme
+      const systemScheme = Appearance.getColorScheme();
+      if (systemScheme) {
+        setColorScheme(systemScheme);
+      }
+
+      // Listen for system theme changes
+      subscription = Appearance.addChangeListener(({ colorScheme: newScheme }) => {
+        if (newScheme) {
+          setColorScheme(newScheme);
+        }
+      });
+    } else {
+      // Set manual theme
+      setColorScheme(themeMode);
+    }
+
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  }, [themeMode]);
+
   const loadTheme = async () => {
-    const savedTheme = await getItem('theme');
-    if (savedTheme) {
-      setColorScheme(savedTheme);
+    const savedMode = await getItem('themeMode');
+    if (savedMode) {
+      setThemeMode(savedMode);
     }
   };
 
-  const changeTheme = async (theme) => {
-    setColorScheme(theme);
-    await setItem('theme', theme);
-  };
-
-  const toggleTheme = async () => {
-    const newTheme = colorScheme === 'dark' ? 'light' : 'dark';
-    toggleColorScheme();
-    await setItem('theme', newTheme);
+  const changeThemeMode = async (mode) => {
+    setThemeMode(mode);
+    await setItem('themeMode', mode);
   };
 
   return (
     <ThemeContext.Provider value={{ 
-      theme: colorScheme, 
+      themeMode,
       isDarkMode: colorScheme === 'dark',
-      toggleTheme,
-      setTheme: changeTheme 
+      setThemeMode: changeThemeMode
     }}>
       {children}
     </ThemeContext.Provider>

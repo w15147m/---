@@ -48,7 +48,6 @@ const AppNavigator = () => {
         {/* Detail Screens (Global Stack) */}
         <Stack.Screen name="ArticleDetail" component={ArticleDetail} />
         <Stack.Screen name="TestSync" component={TestSync} />
-        <Stack.Screen name="Settings" component={Settings} />
         
         {/* Auth is only available if not logged in */}
         {!user && (

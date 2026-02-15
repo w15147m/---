@@ -1,14 +1,21 @@
 import React from 'react';
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
-import { MinusIcon, PlusIcon, MoonIcon, SunIcon, CloudArrowDownIcon, ChevronRightIcon } from 'react-native-heroicons/outline';
+import { View, Text, StatusBar, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { MinusIcon, PlusIcon, MoonIcon, SunIcon, ComputerDesktopIcon, ChevronRightIcon } from 'react-native-heroicons/outline';
 import { useTheme } from '../context/ThemeContext';
 import { useFont } from '../context/FontContext';
 import { useNavigation } from '@react-navigation/native';
+import HomeHeader from './components/HomeHeader';
 
 const Settings = () => {
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { themeMode, setThemeMode, isDarkMode } = useTheme();
   const { arabicSize, translationSize, headerSize, listTitleSize, setFontSize } = useFont();
   const navigation = useNavigation();
+
+  const themeOptions = [
+    { id: 'light', label: 'Light', icon: SunIcon, color: '#f59e0b', bgColor: 'bg-amber-50 dark:bg-amber-900/10' },
+    { id: 'dark', label: 'Dark', icon: MoonIcon, color: '#fbbf24', bgColor: 'bg-amber-50 dark:bg-amber-900/10' },
+    { id: 'system', label: 'Follow system', icon: ComputerDesktopIcon, color: '#6366f1', bgColor: 'bg-indigo-50 dark:bg-indigo-900/10' }
+  ];
 
   const fontSettings = [
     {
@@ -62,34 +69,45 @@ const Settings = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 mt-10 bg-slate-50 dark:bg-slate-950">
-      <ScrollView className="flex-1" contentContainerStyle={{ padding: 16 }}>
+    <View className="flex-1 bg-slate-50 dark:bg-slate-950">
+      <StatusBar translucent backgroundColor="transparent" barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <SafeAreaView className="flex-1">
+        <View className="flex-1 px-6">
+          
+          {/* Top Navigation - Reusing HomeHeader */}
+          <HomeHeader 
+            onOpenDrawer={() => navigation.openDrawer()} 
+            iconColor={isDarkMode ? "white" : "#0f172a"}
+          />
+
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         
-        {/* Dark Mode Toggle */}
-        <View className="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 mb-4">
-          <View className="flex-row items-center justify-between">
-            <View className="flex-row items-center flex-1">
-              <View className="w-10 h-10 bg-amber-50 dark:bg-amber-900/20 rounded-xl items-center justify-center mr-4">
-                {isDarkMode ? (
-                  <MoonIcon size={20} color="#fbbf24" />
-                ) : (
-                  <SunIcon size={20} color="#f59e0b" />
-                )}
-              </View>
-              <View className="flex-1">
-                <Text className="text-lg font-bold text-slate-900 dark:text-white">
-                  {isDarkMode ? 'Dark Mode' : 'Light Mode'}
+        {/* Theme Selection */}
+        <View className="bg-white dark:bg-slate-900 rounded-2xl p-5  shadow-sm border border-slate-100 dark:border-slate-800 my-4">
+          <Text className="text-lg font-bold text-slate-900 dark:text-white mb-4">Theme</Text>
+          
+          <View className="flex-row space-x-3">
+            {themeOptions.map((option) => (
+              <TouchableOpacity
+                key={option.id}
+                onPress={() => setThemeMode(option.id)}
+                activeOpacity={0.7}
+                className={`flex-1 items-center justify-center p-4 rounded-xl border-2 ${
+                  themeMode === option.id 
+                    ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20' 
+                    : 'border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50'
+                }`}
+              >
+                <View className={`w-10 h-10 items-center justify-center mb-2`}>
+                  <option.icon size={24} color={themeMode === option.id ? '#6366f1' : '#94a3b8'} strokeWidth={2} />
+                </View>
+                <Text className={`text-sm font-bold text-center ${
+                  themeMode === option.id ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'
+                }`}>
+                  {option.id === 'system' ? 'Auto' : option.label}
                 </Text>
-                
-              </View>
-            </View>
-            <TouchableOpacity
-              onPress={toggleTheme}
-              activeOpacity={0.8}
-              className={`w-14 h-8 rounded-full px-1 justify-center ${isDarkMode ? 'bg-indigo-600 items-end' : 'bg-slate-300 items-start'}`}
-            >
-              <View className="w-6 h-6 bg-white rounded-full shadow-sm" />
-            </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
 
@@ -187,7 +205,9 @@ const Settings = () => {
           </View>
         ))}
       </ScrollView>
-    </SafeAreaView>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 };
 

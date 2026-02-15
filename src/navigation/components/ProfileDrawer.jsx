@@ -76,7 +76,7 @@ const ProfileDrawer = (props) => {
             { label: 'Rate Us', icon: StarIcon, action: () => showAlert('Rate Us', 'Coming Soon!', 'info') },
             { label: 'Contact Us', icon: BookOpenIcon, action: () => showAlert('Contact Us', 'Coming Soon!', 'info') },
             { label: 'About Us', icon: QuestionMarkCircleIcon, action: () => showAlert('About Us', 'Coming Soon!', 'info') },
-            { label: 'Settings', icon: Cog6ToothIcon, action: () => props.navigation.navigate('Settings') }
+            { label: 'Settings', icon: Cog6ToothIcon, action: () => props.navigation.navigate('TabsRoot', { screen: 'SettingsTab' }) }
           ].map((item, index) => (
             <TouchableOpacity key={index} onPress={item.action} activeOpacity={0.5} className="flex-row items-center px-4 py-2 rounded-2xl">
               <View className="w-10 h-10 bg-slate-50 dark:bg-slate-800 rounded-xl items-center justify-center mr-4">

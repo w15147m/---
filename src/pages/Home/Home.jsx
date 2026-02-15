@@ -28,7 +28,7 @@ const { width } = Dimensions.get('window');
 const Home = () => {
   const navigation = useNavigation();
   const { isDarkMode } = useTheme();
-  const { location, saveLocation } = useLocation();
+  const { location, saveLocation, triggerGPS, loading: locLoading } = useLocation();
   const [showLocationModal, setShowLocationModal] = React.useState(false);
 
   // Auto-show modal if no location is saved
@@ -49,6 +49,17 @@ const Home = () => {
       cityName: city.name
     });
     setShowLocationModal(false);
+  };
+
+  const handleUseGPS = async () => {
+    const success = await triggerGPS();
+    if (success) {
+      setShowLocationModal(false);
+    } else {
+      // If GPS fails (e.g. module not linked), we keep modal open
+      // but show a toast or alert (placeholder for now)
+      alert("Please rebuild your app to enable GPS features, or select a city below.");
+    }
   };
 
   const categories = [
@@ -111,6 +122,8 @@ const Home = () => {
           isVisible={showLocationModal}
           onClose={() => setShowLocationModal(false)}
           onSelectCity={handleSelectCity}
+          onUseGPS={handleUseGPS}
+          isDetecting={locLoading}
         />
     </View>
   );

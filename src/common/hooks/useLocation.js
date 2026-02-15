@@ -66,11 +66,38 @@ export const useLocation = () => {
     }
   };
 
+  const triggerGPS = async () => {
+    try {
+      setLoading(true);
+      if (!NativeModules.RNGetLocation) {
+        throw new Error('GPS module not installed');
+      }
+      const GetLocation = require('react-native-get-location').default;
+      const loc = await GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 10000,
+      });
+
+      const gpsLoc = {
+        latitude: loc.latitude,
+        longitude: loc.longitude,
+        cityName: 'Current Location (GPS)'
+      };
+      await saveLocation(gpsLoc);
+      return true;
+    } catch (err) {
+      console.warn('GPS Error:', err.message);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchLocation();
   }, []);
 
-  return { location, loading, error, saveLocation, refresh: fetchLocation };
+  return { location, loading, error, saveLocation, triggerGPS, refresh: fetchLocation };
 };
 
 export default useLocation;

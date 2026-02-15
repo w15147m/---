@@ -25,7 +25,7 @@ const CITIES = [
   { name: 'Mumbai, IN', lat: 19.0760, lon: 72.8777 },
 ];
 
-const LocationModal = ({ isVisible, onClose, onSelectCity }) => {
+const LocationModal = ({ isVisible, onClose, onSelectCity, onUseGPS, isDetecting }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredCities = searchQuery.trim() === '' 
@@ -50,12 +50,34 @@ const LocationModal = ({ isVisible, onClose, onSelectCity }) => {
                   Set Your Location
                 </Text>
                 <Text className="text-slate-500 dark:text-slate-400 text-sm">
-                  Choose your city for accurate prayer times
+                  Choose your city or use GPS
                 </Text>
               </View>
               <TouchableOpacity onPress={onClose} className="p-2">
                 <XMarkIcon size={24} color="#64748b" />
               </TouchableOpacity>
+            </View>
+
+            {/* Use Current Location Button */}
+            <TouchableOpacity 
+              onPress={onUseGPS}
+              disabled={isDetecting}
+              className="flex-row items-center bg-indigo-600 rounded-2xl p-4 mb-4 shadow-sm"
+            >
+              <View className="bg-white/20 p-2 rounded-lg mr-3">
+                <MapPinIcon size={20} color="white" />
+              </View>
+              <Text className="text-white font-bold text-lg flex-1">
+                {isDetecting ? 'Detecting Location...' : 'Use Current Location'}
+              </Text>
+            </TouchableOpacity>
+
+            <View className="flex-row items-center mb-4">
+              <View className="flex-1 h-[1px] bg-slate-200 dark:bg-slate-800" />
+              <Text className="mx-4 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                Or pick a city
+              </Text>
+              <View className="flex-1 h-[1px] bg-slate-200 dark:bg-slate-800" />
             </View>
 
             {/* Search Bar */}

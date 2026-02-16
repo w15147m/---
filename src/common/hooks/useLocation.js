@@ -155,7 +155,8 @@ export const useLocation = () => {
       await saveLocation(gpsLoc);
       return { success: true };
     } catch (err) {
-      console.warn('GPS Error:', err.message);
+      // console.warn('GPS Error:', err.message); // Silenced as UI handles it
+      
       let friendlyError = err.message;
       if (err.code === 'UNAVAILABLE') {
         friendlyError = 'Location services are disabled. Please turn on GPS.';

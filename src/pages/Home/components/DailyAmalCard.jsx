@@ -6,6 +6,7 @@ import {
   ChevronRightIcon
 } from 'react-native-heroicons/solid';
 import { useTheme } from '../../../context/ThemeContext';
+import LocationDisplay from '../../../common/components/LocationDisplay';
 import useLocation from '../../../common/hooks/useLocation';
 import HijriUtils from '../../../common/utils/hijri.utils';
 import usePrayerTimes from '../../../common/hooks/usePrayerTimes';
@@ -19,7 +20,7 @@ const DailyAmalCard = ({ onPress }) => {
   return (
     <TouchableOpacity 
       activeOpacity={0.9}
-      onPress={onPress}
+      onPress={onPress} // Keep native onPress if parent wants to do something, or remove if LocationDisplay handles it
       className="bg-indigo-600 dark:bg-indigo-900 rounded-3xl p-6 mb-8 shadow-xl overflow-hidden relative"
     >
       {/* Decorative background element */}
@@ -33,9 +34,7 @@ const DailyAmalCard = ({ onPress }) => {
           <Text className="text-white text-3xl font-black leading-tight">
              {hijriDate.day} {hijriDate.monthName || 'Month'}
           </Text>
-          <Text className="text-white/70 text-base">
-            {location?.cityName || 'Select Location'}
-          </Text>
+          <LocationDisplay />
         </View>
         <View className="bg-white/20 p-3 rounded-2xl">
            <Image 

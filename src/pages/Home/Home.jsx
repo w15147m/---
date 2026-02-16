@@ -8,71 +8,20 @@ import {
   TouchableOpacity,
   Dimensions,
   StatusBar,
-  Alert,
-  Linking
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { 
-  Bars3BottomLeftIcon,
-} from 'react-native-heroicons/solid';
-
 import { useTheme } from '../../context/ThemeContext';
 import CategoryCard from './components/CategoryCard';
 import DailyAmalCard from './components/DailyAmalCard';
 import HomeHeader from '../../common/components/HomeHeader';
 import LastReadCard from './components/LastReadCard';
-import useLocation from '../../common/hooks/useLocation';
-import LocationModal from '../../common/components/LocationModal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const { width } = Dimensions.get('window');
 
 const Home = () => {
   const navigation = useNavigation();
   const { isDarkMode } = useTheme();
-  const { location, saveLocation, triggerGPS, loading: locLoading } = useLocation();
-  const [showLocationModal, setShowLocationModal] = React.useState(false);
 
-  // Auto-show modal if no location is saved or if it's a default fallback
-  React.useEffect(() => {
-    const checkLocation = async () => {
-      const saved = await AsyncStorage.getItem('@user_location');
-      if (!saved || JSON.parse(saved).cityName?.includes('Default')) {
-        setShowLocationModal(true);
-      }
-    };
-    checkLocation();
-  }, []);
-
-  const handleSelectCity = (city) => {
-    saveLocation({
-      latitude: city.lat,
-      longitude: city.lon,
-      cityName: city.name
-    });
-    setShowLocationModal(false);
-  };
-
-  const handleUseGPS = async () => {
-    const result = await triggerGPS();
-    if (result.success) {
-      setShowLocationModal(false);
-    } else {
-      // Show actionable alert
-      Alert.alert(
-        "Location Error",
-        result.error,
-        [
-          { text: "Cancel", style: "cancel" },
-          { 
-            text: "Open Settings", 
-            onPress: () => Linking.openSettings() 
-          }
-        ]
-      );
-    }
-  };
-
+  // Auto-show modal removed as we now rely on GPS auto-start in LocationDisplay
+  
   const categories = [
     { id: '1', title_ur: 'سورۃ', title_en: 'Surah', icon: require('../../assets/ui-assets/quranSura.png') },
     { id: '2', title_ur: 'پارہ', title_en: 'Para', icon: require('../../assets/ui-assets/quranSura.png') },
@@ -96,9 +45,7 @@ const Home = () => {
             
             {/* Today's A'mal Section (Dynamic) */}
             <View className="mt-4">
-              <DailyAmalCard 
-                onPress={() => setShowLocationModal(true)}
-              />
+              <DailyAmalCard />
             </View>
 
             {/* Last Read Card - Keep below or remove as per preference, but adding for value */}
@@ -108,8 +55,6 @@ const Home = () => {
               icon={require('../../assets/ui-assets/quranSura.png')}
               onPressBookmark={() => console.log('Bookmark pressed')}
             />
-
-          
 
               {/* Categories Grid - Now Reusable */}
               <View className="flex-row flex-wrap justify-between">
@@ -125,15 +70,6 @@ const Home = () => {
             </ScrollView>
           </View>
         </SafeAreaView>
-
-        {/* Location Selector Modal */}
-        <LocationModal 
-          isVisible={showLocationModal}
-          onClose={() => setShowLocationModal(false)}
-          onSelectCity={handleSelectCity}
-          onUseGPS={handleUseGPS}
-          isDetecting={locLoading}
-        />
     </View>
   );
 };

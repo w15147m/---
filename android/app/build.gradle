@@ -55,7 +55,13 @@ react {
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
+
+/**
+ * Set this to true to create four separate APKs instead of one,
+ * one for each native architecture. This is useful for reducing APK size.
+ */
+def enableSeparateBuildPerCPUArchitecture = true
 
 /**
  * The preferred build flavor of JavaScriptCore (JSC)
@@ -91,6 +97,14 @@ android {
             keyPassword 'android'
         }
     }
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk false  // We don't need the giant universal APK
+            include "arm64-v8a" // Only build for modern Android phones (new phones)
+        }
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -101,6 +115,21 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    // applicationVariants are e.g. debug, release
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            // For each separate APK per architecture, set a unique version code as described here:
+            // https://developer.android.com/studio/build/configure-apk-splits.html
+            // Example: buildTime64-v8a: 2101, x86: 2102, armeabi-v7a: 2103, x86_64: 2104
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
+            def abi = output.getFilter(com.android.build.OutputFile.ABI)
+            if (abi != null) {  // null for the universal-debug, universal-release variants
+                output.versionCodeOverride =
+                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)
+            }
         }
     }
 }

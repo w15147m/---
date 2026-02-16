@@ -6,13 +6,15 @@ import {
   ChevronRightIcon
 } from 'react-native-heroicons/solid';
 import { useTheme } from '../../../context/ThemeContext';
-import usePrayerTimes from '../../../common/hooks/usePrayerTimes';
+import useLocation from '../../../common/hooks/useLocation';
 import HijriUtils from '../../../common/utils/hijri.utils';
+import usePrayerTimes from '../../../common/hooks/usePrayerTimes';
 
-const DailyAmalCard = ({ onPress, locationName, coordinates }) => {
+const DailyAmalCard = ({ onPress }) => {
   const { isDarkMode } = useTheme();
   const hijriDate = HijriUtils.getHijriDate();
-  const { times, loading } = usePrayerTimes(coordinates);
+  const { location } = useLocation();
+  const { times, loading } = usePrayerTimes(location);
 
   return (
     <TouchableOpacity 
@@ -29,10 +31,10 @@ const DailyAmalCard = ({ onPress, locationName, coordinates }) => {
             Today's A'mal
           </Text>
           <Text className="text-white text-3xl font-black leading-tight">
-            {hijriDate.day} {hijriDate.monthName || 'Month'}
+             {hijriDate.day} {hijriDate.monthName || 'Month'}
           </Text>
           <Text className="text-white/70 text-base">
-            {coordinates?.cityName || locationName || 'Current Location'}
+            {location?.cityName || 'Select Location'}
           </Text>
         </View>
         <View className="bg-white/20 p-3 rounded-2xl">

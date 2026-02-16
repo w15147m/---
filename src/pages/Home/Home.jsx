@@ -7,7 +7,9 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  StatusBar
+  StatusBar,
+  Alert,
+  Linking
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { 
@@ -52,13 +54,22 @@ const Home = () => {
   };
 
   const handleUseGPS = async () => {
-    const success = await triggerGPS();
-    if (success) {
+    const result = await triggerGPS();
+    if (result.success) {
       setShowLocationModal(false);
     } else {
-      // If GPS fails (e.g. module not linked), we keep modal open
-      // but show a toast or alert (placeholder for now)
-      alert("Please rebuild your app to enable GPS features, or select a city below.");
+      // Show actionable alert
+      Alert.alert(
+        "Location Error",
+        result.error,
+        [
+          { text: "Cancel", style: "cancel" },
+          { 
+            text: "Open Settings", 
+            onPress: () => Linking.openSettings() 
+          }
+        ]
+      );
     }
   };
 
@@ -86,8 +97,6 @@ const Home = () => {
             {/* Today's A'mal Section (Dynamic) */}
             <View className="mt-4">
               <DailyAmalCard 
-                coordinates={location}
-                locationName={location?.cityName || 'Select Location'}
                 onPress={() => setShowLocationModal(true)}
               />
             </View>

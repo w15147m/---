@@ -47,7 +47,7 @@ const SplashScreen = ({ onFinish }) => {
       {/* Background Image */}
       <Image 
         source={require('../../assets/ui-assets/Splash.png')}
-        style={StyleSheet.absoluteFillObject}
+        style={[StyleSheet.absoluteFill, { width: '100%', height: '100%' }]}
         resizeMode="cover"
       />
 
@@ -87,9 +87,10 @@ const SplashScreen = ({ onFinish }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#0f172a',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 0, 
   }
 });
 

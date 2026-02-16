@@ -7,7 +7,8 @@ import {
   BookOpenIcon,
   SparklesIcon,
   Cog6ToothIcon,
-  SwatchIcon
+  SwatchIcon,
+  MagnifyingGlassIcon
 } from 'react-native-heroicons/outline';
 import { 
   HomeIcon as HomeIconSolid,
@@ -15,7 +16,8 @@ import {
   BookOpenIcon as BookOpenIconSolid,
   SparklesIcon as SparklesIconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
-  SwatchIcon as SwatchIconSolid
+  SwatchIcon as SwatchIconSolid,
+  MagnifyingGlassIcon as MagnifyingGlassIconSolid
 } from 'react-native-heroicons/solid';
 
 // Custom Components & Pages
@@ -23,6 +25,7 @@ import CustomTabBar from './CustomTabBar';
 import Home from '../../pages/Home/Home';
 import Profile from '../../pages/Profile/Profile';
 import Explorer from '../../pages/Explorer/Explorer';
+import Explore from '../../pages/Explore/Explore';
 import ArticleDetail from '../../pages/ArticleDetail/ArticleDetail';
 import Settings from '../../pages/Settings/Settings';
 import Tasbih from '../../pages/Tasbih/Tasbih';
@@ -81,12 +84,12 @@ const TabNavigator = () => {
       />
 
       <Tab.Screen 
-        name="Library" 
-        component={Explorer} 
+        name="ExploreTab" 
+        component={Explore} 
         options={{ 
-          title: 'Library',
-          tabBarIcon: (props) => <BookOpenIcon {...props} />,
-          tabBarIconActive: (props) => <BookOpenIconSolid {...props} />
+          title: 'Explore',
+          tabBarIcon: (props) => <MagnifyingGlassIcon {...props} />,
+          tabBarIconActive: (props) => <MagnifyingGlassIconSolid {...props} />
         }} 
       />
 

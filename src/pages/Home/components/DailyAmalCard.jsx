@@ -28,9 +28,7 @@ const DailyAmalCard = ({ onPress }) => {
       
       <View className="flex-row justify-between items-start mb-6">
         <View className="flex-1 mr-2">
-          <Text className="text-white/80 text-sm font-medium uppercase tracking-widest mb-1">
-            Today's A'mal
-          </Text>
+        
           <Text className="text-white text-3xl font-black leading-tight">
              {hijriDate.day} {hijriDate.monthName || 'Month'}
           </Text>
@@ -71,10 +69,6 @@ const DailyAmalCard = ({ onPress }) => {
         </View>
       </View>
 
-      <View className="mt-4 flex-row items-center justify-end">
-        <Text className="text-white/90 text-sm mr-1">View Daily Duas</Text>
-        <ChevronRightIcon size={16} color="white" />
-      </View>
     </TouchableOpacity>
   );
 };

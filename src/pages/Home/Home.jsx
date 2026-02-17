@@ -12,6 +12,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import DailyAmalCard from './components/DailyAmalCard';
+import AmalList from './components/AmalList';
 import HomeHeader from '../../common/components/HomeHeader';
 
 const Home = () => {
@@ -38,6 +39,9 @@ const Home = () => {
             <View className="mt-4">
               <DailyAmalCard />
             </View>
+
+            {/* List of Today's Amal */}
+            <AmalList />
 
           </ScrollView>
         </View>

@@ -13,32 +13,61 @@ const LocationDisplay = ({ style, textStyle }) => {
       const result = await triggerGPS();
       
       if (!result.success) {
-        // Show persistent modal
-        showAlert(
-          "Location Required",
-          result.error || "Please turn on GPS to see prayer times.",
-          "error",
-          () => {
-            // 1. Open Settings
-            if (Platform.OS === 'android') {
-              Linking.sendIntent('android.settings.LOCATION_SOURCE_SETTINGS');
-            } else {
-              Linking.openSettings();
-            }
+        // Check if it's specifically an internet issue
+        if (result.needsInternet) {
+          showAlert(
+            "Internet Required",
+            "Turn on WiFi or mobile data to get your city name automatically.",
+            "warning",
+            () => {
+              // Open WiFi/Network Settings
+              if (Platform.OS === 'android') {
+                Linking.sendIntent('android.settings.WIFI_SETTINGS');
+              } else {
+                Linking.openSettings();
+              }
 
-            // 2. Immediately show "Continue" modal to wait for user return
-            setTimeout(() => {
-              showAlert(
-                "Location Settings",
-                "Once you have enabled GPS, press Continue to refresh.",
-                "info",
-                () => checkLocation(), // This will loop back if it fails again
-                "Continue"
-              );
-            }, 500);
-          },
-          "Open Settings"
-        );
+              // Show continue modal
+              setTimeout(() => {
+                showAlert(
+                  "Internet Settings",
+                  "Once internet is enabled, press Continue to get your city.",
+                  "info",
+                  () => checkLocation(),
+                  "Continue"
+                );
+              }, 500);
+            },
+            "Open WiFi Settings"
+          );
+        } else {
+          // GPS/Permission error (existing logic)
+          showAlert(
+            "Location Required",
+            result.error || "Please turn on GPS to see prayer times.",
+            "error",
+            () => {
+              // Open Location Settings
+              if (Platform.OS === 'android') {
+                Linking.sendIntent('android.settings.LOCATION_SOURCE_SETTINGS');
+              } else {
+                Linking.openSettings();
+              }
+
+              // Show continue modal
+              setTimeout(() => {
+                showAlert(
+                  "Location Settings",
+                  "Once you have enabled GPS, press Continue to refresh.",
+                  "info",
+                  () => checkLocation(),
+                  "Continue"
+                );
+              }, 500);
+            },
+            "Open Settings"
+          );
+        }
       }
     }
   };

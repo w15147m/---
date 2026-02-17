@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NativeModules } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 
 const STORAGE_KEY = '@user_location';
 const DEFAULT_FALLBACK = { 
@@ -54,12 +55,12 @@ export const useLocation = () => {
         });
 
         // RESOLVE NAME IMMEDIATELY
-        const cityName = await reverseGeocode(loc.latitude, loc.longitude);
+        const geocodeResult = await reverseGeocode(loc.latitude, loc.longitude);
 
         const gpsLoc = {
           latitude: loc.latitude,
           longitude: loc.longitude,
-          cityName: cityName
+          cityName: geocodeResult.cityName
         };
         setLocation(gpsLoc);
         saveLocation(gpsLoc); // Save it so we don't ask again next time
@@ -79,15 +80,24 @@ export const useLocation = () => {
 
   const reverseGeocode = async (lat, lon) => {
     try {
+      // Check internet connectivity first
+      const netInfo = await NetInfo.fetch();
+      const isConnected = netInfo.isConnected && netInfo.isInternetReachable !== false;
+      
+      if (!isConnected) {
+        console.log('[Geo] No internet connection detected');
+        return { cityName: 'Unknown Location', needsInternet: true };
+      }
+
       let cityName = null;
 
-      // 1. Try Native Android Geocoder first
+      // 1. Try Native Android Geocoder first (requires internet on Android)
       if (NativeModules.GeoModule) {
         try {
           const nativeName = await NativeModules.GeoModule.getCityName(lat, lon);
           console.log('[Geo] Native Result:', nativeName);
           if (nativeName && !nativeName.includes('Error') && !nativeName.includes('Unknown') && !nativeName.includes('Not Available')) {
-            return nativeName;
+            return { cityName: nativeName, needsInternet: false };
           }
         } catch (e) {
           console.warn('[Geo] Native Failed:', e);
@@ -106,7 +116,7 @@ export const useLocation = () => {
         if (osmRes.ok) {
           const data = await osmRes.json();
           const city = data.address.city || data.address.town || data.address.village || data.address.county || data.address.state;
-          if (city) return city;
+          if (city) return { cityName: city, needsInternet: false };
         }
       } catch (e) {
         console.warn('[Geo] OSM Failed:', e.message);
@@ -119,16 +129,16 @@ export const useLocation = () => {
         if (bdcRes.ok) {
           const data = await bdcRes.json();
           const city = data.city || data.locality || data.principalSubdivision;
-          if (city) return city;
+          if (city) return { cityName: city, needsInternet: false };
         }
       } catch (e) {
         console.warn('[Geo] BDC Failed:', e.message);
       }
       
-      return 'Unknown Location';
+      return { cityName: 'Unknown Location', needsInternet: false };
     } catch (error) {
       console.warn('All Geocoding Failed:', error);
-      return 'Unknown Location';
+      return { cityName: 'Unknown Location', needsInternet: false };
     }
   };
 
@@ -145,12 +155,21 @@ export const useLocation = () => {
       });
 
       // Get readable city name
-      const cityName = await reverseGeocode(loc.latitude, loc.longitude);
+      const geocodeResult = await reverseGeocode(loc.latitude, loc.longitude);
+      
+      // If internet is needed for geocoding, return early with the flag
+      if (geocodeResult.needsInternet) {
+        return { 
+          success: false, 
+          needsInternet: true,
+          error: 'Internet connection required to get city name from your location.'
+        };
+      }
       
       const gpsLoc = {
         latitude: loc.latitude,
         longitude: loc.longitude,
-        cityName: cityName // This will now be the resolved name or 'Location Found'
+        cityName: geocodeResult.cityName
       };
       await saveLocation(gpsLoc);
       return { success: true };
